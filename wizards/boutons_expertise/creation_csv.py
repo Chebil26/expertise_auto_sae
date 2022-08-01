@@ -69,8 +69,9 @@ class CreationOds(models.TransientModel):
 
             date_ods = date_ods.replace("'", "")
 
-            #if not self.env['res_partner'].search([('code_agence', '=', i[2])], limit=1).id:
-             #   raise UserError("Code agence non trouvable")
+            raise UserError("numero ods manquant")
+            raise UserError("code agence non trouvable")
+
 
             val = {
                 "num_sinistre": i[3],
