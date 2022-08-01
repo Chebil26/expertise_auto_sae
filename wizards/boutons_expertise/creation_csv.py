@@ -24,24 +24,6 @@ class CreationOds(models.TransientModel):
 
     csvf = fields.Binary("csv file",  readonly=False)
 
-    #code_agence = fields.Many2one('sae.expertise.auto', string="Code Agence", required=True)
-    num_sinistre = fields.Char("N° Sinistre")
-    survenance_yr = fields.Integer("Année de survenance")
-    date_expertise = fields.Date("Date expertise")
-    expert = fields.Char("Expert")
-
-    montant_fourniture = fields.Float("Montant TTC des fournitures")
-    montant_peinture = fields.Float("Montant TTC de la peinture")
-    montant_main_doeuvre = fields.Float("Montant TTC de la main d’œuvre")
-    montant_note_honoraires = fields.Float("Montant TTC de la note d’honoraires")
-    montant_fourniture_nonsoumis = fields.Float("Montant TTC des fournitures non soumis à vétusté")
-
-    nbrj_immobilisation = fields.Integer("Nombre de jours d’immobilisation")
-    vetuste = fields.Float("Taux de la vétusté")
-    vin = fields.Char("VIN")
-
-
-
     def doo(self):
 
 
@@ -92,36 +74,3 @@ class CreationOds(models.TransientModel):
             print(val)
 
             a = self.env['sae.expertise.auto'].create(val)
-            print(val)
-            #self.date_expertise = self.env['sae.expertise.auto'].create({"date_cloture": i[4]})
-            #self.vetuste = self.env['sae.expertise.auto'].create({"taux_vet": i[12]})
-            #self.vin = self.env['sae.expertise.auto'].create({"num_chas": i[13]})
-
-
-
-
-
-
-
-        #print(self.csvf)
-        #file = tempfile.NamedTemporaryFile(suffix=".csv")
-        #file.write(self.csvf)
-        #print(file.name)
-        #print(file.read())
-        #dff = pd.read_csv(str(file.name).replace("\\",'/'), header=None).sudo()
-        #print(dff)
-
-
-
-
-
-        #for i in expertise:
-            #self.env['res.partner'].create()
-
-
-
-
-
-
-
-
