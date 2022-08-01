@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    config auto-->
+    <record id="res_config_settings_view_auto_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.auto</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="expertise_auto_sae" string="Expertise Auto" data-key="expertise_auto_sae">
+                    <h2>Paramètres</h2>
+
+                    <group>
+                        <field name="taxe_global_auto"/>
+                    </group>
+
+                </div>
+            </xpath>
+        </field>
+    </record>
+    <record id="action_sae_auto_configuration" model="ir.actions.act_window">
+        <field name="name">Paramètres</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'expertise_auto_sae', 'bin_size': False}</field>
+    </record>
+
+    <!--sae_nature-->
+    <record id="sae_nature_form_view" model="ir.ui.view">
+        <field name="name">sae.nature.form</field>
+        <field name="model">sae.nature</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="type_nature"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_nature_tree_view" model="ir.ui.view">
+        <field name="name">sae.nature.tree</field>
+        <field name="model">sae.nature</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="type_nature"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_nature" model="ir.actions.act_window">
+        <field name="name">Nature d'expertise</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.nature</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter une nouvelle Nature d'expertise.
+            </p>
+        </field>
+    </record>
+    <!--sae_type-->
+    <record id="sae_type_form_view" model="ir.ui.view">
+        <field name="name">sae.type.form</field>
+        <field name="model">sae.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_type_tree_view" model="ir.ui.view">
+        <field name="name">sae.type.tree</field>
+        <field name="model">sae.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_type" model="ir.actions.act_window">
+        <field name="name">Type Véhicule</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter un NOUVEAU Modèle.
+            </p>
+        </field>
+    </record>
+    <!--sae_energie-->
+    <record id="sae_energie_form_view" model="ir.ui.view">
+        <field name="name">sae.energie.form</field>
+        <field name="model">sae.energie</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_energie_tree_view" model="ir.ui.view">
+        <field name="name">sae.energie.tree</field>
+        <field name="model">sae.energie</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_energie" model="ir.actions.act_window">
+        <field name="name">Energie</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.energie</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter un NOUVEAU Type d'enrgie.
+            </p>
+        </field>
+    </record>
+    <!--sae_couleur-->
+    <record id="sae_couleur_form_view" model="ir.ui.view">
+        <field name="name">sae.couleur.form</field>
+        <field name="model">sae.couleur</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_couleur_tree_view" model="ir.ui.view">
+        <field name="name">sae.couleur.tree</field>
+        <field name="model">sae.couleur</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_couleur" model="ir.actions.act_window">
+        <field name="name">Couleur</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.couleur</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter une Nouvelle Couleur.
+            </p>
+        </field>
+    </record>
+    <!--sae_genre-->
+    <record id="sae_genre_form_view" model="ir.ui.view">
+        <field name="name">sae.genre.form</field>
+        <field name="model">sae.genre</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_genre_tree_view" model="ir.ui.view">
+        <field name="name">sae.genre.tree</field>
+        <field name="model">sae.genre</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_genre" model="ir.actions.act_window">
+        <field name="name">genre</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.genre</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter un Nouveau genre.
+            </p>
+        </field>
+    </record>
+    <!--sae_carosserie-->
+    <record id="sae_carosserie_form_view" model="ir.ui.view">
+        <field name="name">sae.carosserie.form</field>
+        <field name="model">sae.carosserie</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_carosserie_tree_view" model="ir.ui.view">
+        <field name="name">sae.carosserie.tree</field>
+        <field name="model">sae.carosserie</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_carosserie" model="ir.actions.act_window">
+        <field name="name">Carosserie</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.carosserie</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter une Nouvelle carosserie.
+            </p>
+        </field>
+    </record>
+    <!--sae_choc-->
+    <record id="sae_choc_form_view" model="ir.ui.view">
+        <field name="name">sae.choc.form</field>
+        <field name="model">sae.choc</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="desc"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_choc_tree_view" model="ir.ui.view">
+        <field name="name">sae.choc.tree</field>
+        <field name="model">sae.choc</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="desc"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_choc" model="ir.actions.act_window">
+        <field name="name">CHOC</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.choc</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter un Nouveau Choc.
+            </p>
+        </field>
+    </record>
+    <!--sae_famille_reparation-->
+    <record id="sae_famille_reparation_form_view" model="ir.ui.view">
+        <field name="name">sae.famille.reparation.form</field>
+        <field name="model">sae.famille.reparation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="desc"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_famille_reparation_tree_view" model="ir.ui.view">
+        <field name="name">sae.famille.reparation.tree</field>
+        <field name="model">sae.famille.reparation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="desc"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_famille_reparation" model="ir.actions.act_window">
+        <field name="name">Famille de Reparation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.famille.reparation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter une Nouvelle Famille de Reparation.
+            </p>
+        </field>
+    </record>
+    <!--sae_reparation-->
+    <record id="sae_reparation_form_view" model="ir.ui.view">
+        <field name="name">sae.reparation.form</field>
+        <field name="model">sae.reparation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="famille_repa"/>
+                        <field name="type_id"/>
+                        <field name="amount"/>
+                        <field name="forfait"/>
+                        <field name="default"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_reparation_tree_view" model="ir.ui.view">
+        <field name="name">sae.reparation.tree</field>
+        <field name="model">sae.reparation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="famille_repa"/>
+                <field name="type_id"/>
+                <field name="amount"/>
+                <field name="forfait"/>
+                <field name="default"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_sae_reparation" model="ir.actions.act_window">
+        <field name="name">Réparation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.reparation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter une Nouvelle reparation.
+            </p>
+        </field>
+    </record>
+    <!--sae_piece-->
+    <record id="sae_piece_form_view" model="ir.ui.view">
+        <field name="name">sae.piece.form</field>
+        <field name="model">sae.piece</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="marque_id" required="1"/>
+                        <field name="mdl_id" required="1"/>
+                        <field name="annee" required="1"/>
+                        <field name="taxe_id" options="{'no_create': True}" force_save="1"/>
+                        <field name="amount_min" required="1" widget="monetary" optional="show"/>
+                        <field name="amount_moy" required="1" widget="monetary" optional="show"/>
+                        <field name="amount_max" required="1" widget="monetary" optional="show"/>
+                        <field name="amount_fact" required="1" widget="monetary" optional="show"/>
+                        <field name="vetuste"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="sae_piece_tree_view" model="ir.ui.view">
+        <field name="name">sae.piece.tree</field>
+        <field name="model">sae.piece</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="marque_id"/>
+                <field name="mdl_id"/>
+                <field name="annee"/>
+                <field name="amount_min"/>
+                <field name="amount_moy"/>
+                <field name="amount_max"/>
+                <field name="taxe_id" force_save="1"/>
+                <field name="amount_fact"/>
+                <field name="vetuste"/>
+            </tree>
+        </field>
+    </record>
+    <record id="piece_line_search_sub" model="ir.ui.view">
+        <field name="name">sae.piece.search</field>
+        <field name="model">sae.piece</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="marque_id" filter_domain="[('name','ilike',self)]"/>
+                <field name="mdl_id" filter_domain="[('name','ilike',self)]"/>
+                <field name="annee" filter_domain="[('annee', 'ilike', self)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_sae_piece" model="ir.actions.act_window">
+        <field name="name">Pièce</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.piece</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter une Nouvelle piece.
+            </p>
+        </field>
+    </record>
+    <!--sae_lieu-->
+    <record id="sae_lieu_form_view" model="ir.ui.view">
+        <field name="name">sae.lieu.form</field>
+        <field name="model">sae.lieu</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+    <record id="sae_lieu_tree_view" model="ir.ui.view">
+        <field name="name">sae.lieu.tree</field>
+        <field name="model">sae.lieu</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_sae_lieu" model="ir.actions.act_window">
+        <field name="name">Lieu de Visite</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.lieu</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter un Lieu de Visite.
+            </p>
+        </field>
+    </record>
+    <!--bareme_honoraires-->
+    <record id="bareme_honoraires_form_view" model="ir.ui.view">
+        <field name="name">bareme.honoraires.form</field>
+        <field name="model">bareme.honoraires</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="nh_fixe"/>
+                        <field name="borne_inf"/>
+                        <field name="borne_sup"/>
+                        <field name="sur_a"/>
+                        <field name="sur_b"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="bareme_honoraires_tree_view" model="ir.ui.view">
+        <field name="name">bareme.honoraires.tree</field>
+        <field name="model">bareme.honoraires</field>
+        <field name="arch" type="xml">
+            <tree>
+
+                <field name="borne_inf"/>
+                <field name="borne_sup"/>
+                <field name="nh_fixe"/>
+                <field name="sur_a"/>
+                <field name="sur_b"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_bareme_honoraires" model="ir.actions.act_window">
+        <field name="name">Barème Honoraires</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bareme.honoraires</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter un Barème Honoraires.
+            </p>
+        </field>
+    </record>
+
+</odoo>

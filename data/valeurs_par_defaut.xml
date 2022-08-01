@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--model="sae.nature"-->
+        <record id="nature_expertise" model="sae.nature">
+            <field name="name">EXPERTISE</field>
+            <field name="code">E</field>
+            <field name="type_nature">sinistre</field>
+        </record>
+        <record id="nature_visite_risque" model="sae.nature">
+            <field name="name">VISITES DE RISQUE</field>
+            <field name="code">R</field>
+            <field name="type_nature">visite</field>
+        </record>
+        <record id="nature_avis_technique" model="sae.nature">
+            <field name="name">AVIS TECHNIQUE</field>
+            <field name="code">A</field>
+            <field name="type_nature">avis</field>
+        </record>
+        <record id="nature_tierse_expertise" model="sae.nature">
+            <field name="name">TIERSE EXPERTISE</field>
+            <field name="code">T</field>
+            <field name="type_nature">sinistre</field>
+        </record>
+        <record id="nature_expertise_contradictoire" model="sae.nature">
+            <field name="name">EXPERTISE CONTRADICTOIRE</field>
+            <field name="code">EC</field>
+            <field name="type_nature">sinistre</field>
+        </record>
+        <record id="nature_centre_expertise" model="sae.nature">
+            <field name="name">CONTRE EXPERTISE</field>
+            <field name="code">C</field>
+            <field name="type_nature">sinistre</field>
+        </record>
+        <!--model="sae.lieu"-->
+        <record id="lieu_centre" model="sae.lieu">
+            <field name="name">CENTRE</field>
+            <field name="code">C</field>
+        </record>
+        <record id="lieu_hors_centre" model="sae.lieu">
+            <field name="name">HORS CENTRE</field>
+            <field name="code">H</field>
+        </record>
+        <record id="lieu_vacation" model="sae.lieu">
+            <field name="name">VACATION</field>
+            <field name="code">V</field>
+        </record>
+        <record id="lieu_ead" model="sae.lieu">
+            <field name="name">EXPERTISE A DISTANCE</field>
+            <field name="code">D</field>
+        </record>
+
+
+    </data>
+</odoo>

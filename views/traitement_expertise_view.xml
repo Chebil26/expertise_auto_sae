@@ -1,0 +1,1289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--    cas sinistre-->
+    <record id="sae_traitement_expertise_form_view" model="ir.ui.view">
+        <field name="name">sae.expertise.auto.form</field>
+        <field name="model">sae.expertise.auto</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form create="false">
+                <header>
+                    <button name="revenir_photo" type="object" icon="fa-refresh"/>
+                    <field name="state_expertise" widget="statusbar"/>
+                    <field name="photos_null" invisible="1"/>
+                    <field name="photos_lettre_null" invisible="1"/>
+                    <field name="lettre_null" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="type_pv" invisible="1"/>
+                    <button name="precedent" type="object" string="Précédent" class="oe_highlight"/>
+                    <button name="suivant" type="object" string="Suivant" class="oe_highlight"
+                            attrs="{'invisible': [('state_expertise', '=', 'resm')]}"/>
+                    <button name="creer_additif" type="object" string="Créer Additif" class="oe_highlight"
+                            attrs="{'invisible': ['|','|',('type_pv', '=','additif' ),('state_expertise', '!=', 'resm'),('state', '!=', 'cloture')]}"/>
+                    <button name="cloture" type="object" string="Cloturer" class="btn-danger"
+                            attrs="{'invisible': ['|','|','|',('state_expertise', '!=', 'resm'),'|',('state', '!=', 'acpt'),('photos_lettre_null', '!=', False),('lettre_null', '!=', False),('photos_null', '!=', False)]}"/>
+                    <button name="cloture" type="object" string="Cloturer" class="btn-danger"
+                            confirm="Vous n'avez pas introduit de photos, Voulez vous continuer ?"
+                            attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),'|',('state', '!=', 'acpt'),('photos_null', '=', False)]}"/>
+                    <button name="cloture" type="object" string="Cloturer" class="btn-danger"
+                            confirm="Vous n'avez pas effectué une lettre d'invitation, Voulez vous continuer ?"
+                            attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),'|',('state', '!=', 'acpt'),('lettre_null', '=', False)]}"/>
+                    <button name="cloture" type="object" string="Cloturer" class="btn-danger"
+                            confirm="Vous n'avez pas introduit de photos ni de lettre d'invitation, Voulez vous continuer ?"
+                            attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),'|',('state', '!=', 'acpt'),('photos_lettre_null', '=', False)]}"/>
+                </header>
+                <sheet>
+                    <group attrs="{'invisible': [('state_expertise', '=', 'resm')]}">
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="code_agence" readonly="1"/>
+                            <field name="nom_assure" readonly="1"/>
+                            <field name="nbr_choc" invisible="1"/>
+
+                        </group>
+                        <group>
+                            <field name="reforme_bln"
+                                   attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),('type_pv', '=','additif' )]}"/>
+                            <field name="taux_vet_glbl" attrs="{'invisible': [('state_expertise', '!=', 'fourn')]}"/>
+                            <field name="instance_fact" attrs="{'invisible': [('state_expertise', '!=', 'fourn')]}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Photos" name="photos"
+                              attrs="{'invisible': [('state_expertise', '!=', 'photos')]}">
+                            <br/>
+                            <button name="choisir_photos" type="object" icon="fa-plus"
+                                    string="  Insérer" class="oe_highlight"/>
+                            <field name="photos_ids" widget="one2many_list" mode="tree">
+                                <tree editable="bottom"  create="0">
+                                    <field name="images" widget="many2many_binary"/>
+                                    <field name="note"/>
+                                </tree>
+                            </field>
+
+                        </page>
+
+                        <page string="Détails et Tiers" name="detail_tiers"
+                              attrs="{'invisible': [('state_expertise', '!=', 'tiers')]}">
+                            <group>
+                                <group string="Renseignements Expertise">
+                                    <field name="lieu_id" readonly="1"/>
+                                    <field name="code_lieu" invisible="1"/>
+                                    <label for="adrs_vis" string="Adresse" class="o_form_label"/>
+                                    <div attrs="{'readonly': [('code_lieu', '=', 'C')]}">
+                                        <field name="adrs_vis" placeholder="Rue"
+                                               attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                        <field name="wilaya" placeholder="Wilaya"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"
+                                               attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                        <field name="commune_id" placeholder="Commune" class="o_address_city"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"
+                                               attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                    </div>
+                                    <br/>
+                                    <field name="distance" attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                    <field name="nbr_nuit" attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                    <field name="nbr_rps" attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                    <field name="nbr_vac" attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                </group>
+                                <group string="Renseignements Tiers"
+                                       attrs="{'readonly': [('type_pv', '=','additif' )]}">
+                                    <field name="nbr_tiers"/>
+                                    <field name="nom_tiers" attrs="{'readonly': [('nbr_tiers', '=',0 )]}"/>
+                                    <field name="num_plc" attrs="{'readonly': [('nbr_tiers', '=', 0)]}"/>
+                                    <field name="compagnie_tiers" attrs="{'readonly': [('nbr_tiers', '=',0 )]}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="agence_tiers" attrs="{'readonly': [('nbr_tiers', '=',0 )]}"/>
+                                    <field name="lettre_bln" attrs="{'readonly': [('nbr_tiers', '=',0 )]}"/>
+                                </group>
+                            </group>
+                            <group attrs="{'readonly': [('type_pv', '=','additif' )]}">
+                                <field name="text_lettre"
+                                       attrs="{'invisible': ['|',('lettre_bln', '=',False ),('nbr_tiers', '=',0 )]}"/>
+
+                            </group>
+                        </page>
+
+                        <page string="Véhicule" name="page_vehicule"
+                              attrs="{'invisible': [('state_expertise', '!=', 'vehicule')]}">
+                            <group>
+                                <button name="historique_num_chassis" type="object"
+                                        attrs="{'invisible': ['|',('histo_num_chassis', '=', False),('num_chas_pv', '=', False)]}"
+
+                                        string="Historique Numéro de Chassis"/>
+                            </group>
+                            <group>
+                                <button name="changement_num_chassis" type="object"
+                                        string="Changement Numéro de Chassis"
+                                        attrs="{'invisible': ['|',('num_chass_diff', '=', False),('num_chas_pv', '=', False)]}"
+                                        class="btn-danger"/>
+                            </group>
+                            <group>
+                                <group string="Identification Véhicule">
+                                    <field name="Type_imma" readonly="1"/>
+                                    <field name="num_chass_diff" invisible="1"/>
+                                    <field name="histo_num_chassis" invisible="1"/>
+                                    <field name="immatricul" readonly="1"/>
+                                    <field name="num_chas_pv"
+                                           decoration-danger="num_chass_diff == True"
+                                           decoration-warning="histo_num_chassis == True"
+                                           attrs="{'readonly': [('type_pv', '=','additif' )]}"/>
+                                    <field name="an_mec" attrs="{'readonly': [('type_pv', '=','additif' )]}"/>
+                                    <field name="kilometrage" attrs="{'readonly': [('type_pv', '=','additif' )]}"/>
+                                </group>
+
+
+                                <group string="Caractéristiques Véhicule">
+                                    <field name="mrqe_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="mdle_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="genre_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="type_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="enrg_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="carosserie_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="couleur_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="puissance"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Description des Chocs" name="page_chocs"
+                              attrs="{'invisible': [('state_expertise', '!=', 'choc')]}">
+                            <group>
+                                <field name="chocs_ids" widget="one2many_list" mode="tree" nolabel="1"
+                                       options="{'always_reload': True}">
+                                    <tree editable="bottom" create="0" delete="0">
+                                        <field name="chocs_ids_domain" invisible="1"/>
+                                        <field name="classe"/>
+                                        <button name="vider" type="object" icon="fa-arrow-up" width="0.1"
+                                                confirm="Voulez vous vraiment supprimer cette ligne ?"
+                                                attrs="{'invisible': [('obligatoire', '=', False),('obligatoire_name', '=', False)]}"/>
+                                        <field name="obligatoire" invisible="1"/>
+                                        <field name="obligatoire_name" invisible="1"/>
+                                        <field name="mode_lecture" force_save="1" invisible="1"/>
+                                        <field name="name" domain="chocs_ids_domain"
+                                               attrs="{'required': [('obligatoire_name', '=', True)],'readonly': [('mode_lecture', '=', True)]}"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="desc"
+                                               attrs="{'required': [('obligatoire', '=', True)],'readonly': [('mode_lecture', '=', True)]}"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc A" name="page_choc_A"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 1)]}">
+                            <group>
+                                <field name="choc_a" nolabel="1"
+                                       options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="reparations1_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation1_id_domain" invisible="1"/>
+
+                                        <field name="reparation_id" domain="reparation1_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '=', False)]}"
+                                               force_save="1"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+
+                        </page>
+
+                        <page string="Choc B" name="page_choc_B"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 2)]}">
+
+                            <group>
+                                <field name="choc_b" nolabel="1"/>
+                            </group>
+                            <group>
+
+                                <field name="reparations2_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation2_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="reparation2_id_domain" invisible="1"/>
+
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc C" name="page_choc_C"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 3)]}">
+
+                            <group>
+                                <field name="choc_c" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="reparations3_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation3_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="reparation3_id_domain" invisible="1"/>
+
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc D" name="page_choc_D"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 4)]}">
+                            <group>
+                                <field name="choc_d" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="reparations4_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation4_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="reparation4_id_domain" invisible="1"/>
+
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc E" name="page_choc_E"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 5)]}">
+                            <group>
+                                <field name="choc_e" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="reparations5_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation5_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="reparation5_id_domain" invisible="1"/>
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc F" name="page_choc_F"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 6)]}">
+                            <group>
+                                <field name="choc_f" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="reparations6_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation6_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+
+                                        <field name="reparation6_id_domain" invisible="1"/>
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc A" name="page_choc_A_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 1)]}">
+                            <group>
+                                <group>
+                                    <field name="choc_a" nolabel="1"/>
+
+                                </group>
+                                <group>
+                                    <button name="choisir_piece" type="object" icon="fa-plus"
+                                            string="Ajouter" class="oe_highlight"
+                                            context="{'default_num_fourniture': 1}"
+                                    />
+
+                                </group>
+                            </group>
+
+                            <field name="fournitures1_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="top" create="0">
+
+
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht" force_save="1"/>
+
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc B" name="page_choc_B_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;',2)]}">
+                            <group>
+
+                                <group>
+                                    <field name="choc_b" nolabel="1"/>
+                                </group>
+                                <group>
+                                    <button name="choisir_piece" type="object" icon="fa-plus"
+                                            string="Ajouter" class="oe_highlight"
+                                            context="{'default_num_fourniture': 2}"
+                                    />
+
+                                </group>
+                            </group>
+                            <field name="fournitures2_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom" create="0">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht" force_save="1"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc C" name="page_choc_C_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 3)]}">
+                            <group>
+                                <group>
+                                    <field name="choc_c" nolabel="1"/>
+                                </group>
+                                <group>
+
+                                    <button name="choisir_piece" type="object" icon="fa-plus"
+                                            string="Ajouter" class="oe_highlight"
+                                            context="{'default_num_fourniture': 3}"
+                                    />
+
+                                </group>
+                            </group>
+                            <field name="fournitures3_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom" create="0">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht" force_save="1"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc D" name="page_choc_D_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 4)]}">
+                            <group>
+                                <group>
+                                    <field name="choc_d" nolabel="1"/>
+                                </group>
+                                <group>
+
+                                    <button name="choisir_piece" type="object" icon="fa-plus"
+                                            string="Ajouter" class="oe_highlight"
+                                            context="{'default_num_fourniture':4}"
+                                    />
+
+                                </group>
+                            </group>
+                            <field name="fournitures4_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom" create="0">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc E" name="page_choc_E_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 5)]}">
+                            <group>
+                                <group>
+                                    <field name="choc_e" nolabel="1"/>
+                                </group>
+                                <group>
+
+                                    <button name="choisir_piece" type="object" icon="fa-plus"
+                                            string="Ajouter" class="oe_highlight"
+                                            context="{'default_num_fourniture': 5}"
+                                    />
+
+                                </group>
+                            </group>
+                            <field name="fournitures5_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom" create="0">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc F" name="page_choc_F_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 6)]}">
+                            <group>
+                                <group>
+                                    <field name="choc_f" nolabel="1"/>
+                                </group>
+                                <group>
+
+                                    <button name="choisir_piece" type="object" icon="fa-plus"
+                                            string="Ajouter" class="oe_highlight"
+                                            context="{'default_num_fourniture': 6}"
+                                    />
+
+                                </group>
+                            </group>
+                            <field name="fournitures6_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom" create="0">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Réforme" name="refo_rme"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),('reforme_bln', '!=', True)]}">
+                            <group>
+                                <field name="type_ref"/>
+                                <field name="desc_ref"/>
+                                <field name="val_venale"
+                                       attrs="{'required': [('state_expertise', '=', 'rep'),('reforme_bln', '=', True)]}"/>
+                                                                <field name="desc_ref"/>
+                                <field name="val_epave"
+                                       attrs="{'invisible': [('type_ref', '=', 'Vol')],'required': [('state_expertise', '=', 'rep'),('reforme_bln', '=', True),('type_ref', '!=', 'Vol')]}"/>
+                                <field name="montant_pre"
+                                       attrs="{'invisible': [('type_ref', '=', 'Vol')],'required': [('state_expertise', '=', 'rep'),('reforme_bln', '=', True),('type_ref', '!=', 'Vol')]}"/>
+
+                            </group>
+                        </page>
+
+                        <page string="Synthèse" name="synthese"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),('reforme_bln', '=', True)]}">
+                            <group string="Résumé des Chocs">
+                                <field name="resume_chocs_ids" widget="one2many_list" mode="tree" nolabel="1"
+                                       force_save="1" readonly="1">
+                                    <tree editable="bottom">
+                                        <field name="classe"/>
+                                        <field name="choc"/>
+                                        <field name="main_d_oeuvre"/>
+                                        <field name="peinture"/>
+                                        <field name="montant_ht"/>
+                                        <field name="montant_tva"/>
+                                        <field name="montant_ttc"/>
+                                        <field name="immo"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <group string="Résumé Global">
+                                    <field name="total_main_d_oeuvre" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="total_peinture" widget='monetary'/>
+                                    <field name="total_ht" widget='monetary'/>
+                                    <field name="total_tva" widget='monetary'/>
+                                    <field name="total_four_ttc" string="TTC Fournitures sans Vétusté"
+                                           widget='monetary'/>
+                                    <field name="total_four_ttc" string="TTC Fournitures avec Vétusté"
+                                           widget='monetary'/>
+                                    <field name="total_immo"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="total_ttc" widget='monetary'/>
+                                    <field name="total_ttc_text"/>
+                                    <br/>
+
+                                </group>
+                                <group string="infos supplémentaires">
+                                    <field name="etat_vehi"
+                                           attrs="{'required': [('state_expertise', '=', 'resm'),('reforme_bln', '!=', True)]}"/>
+                                    <field name="val_venale_syn" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"
+                                           attrs="{'required': [('state_expertise', '=', 'resm'),('reforme_bln', '!=', True)]}"/>
+                                    <field name="taux_vet"/>
+                                    <field name="val_vet" widget='monetary'/>
+                                    <field name="obsrv_pv"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Synthèse" name="synthese_ref"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),('reforme_bln', '!=', True)]}">
+                            <group string="Synthèse Réforme">
+                                <field name="val_venale"
+                                       attrs="{'required': [('state_expertise', '=', 'resm'),('reforme_bln', '=', True)]}"/>
+                                <field name="val_epave"
+                                       attrs="{'invisible': [('type_ref', '=', 'Vol')],'required': [('state_expertise', '=', 'resm'),('reforme_bln', '=', True),('type_ref', '!=', 'Vol')]}"/>
+                                <field name="montant_pre"
+                                       attrs="{'invisible': [('type_ref', '=', 'Vol')],'required': [('state_expertise', '=', 'resm'),('reforme_bln', '=', True),('type_ref', '!=', 'Vol')]}"/>
+                                <field name="obsrv_pv"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="sae_traitement_expertise_form_annule_et_remplace_view" model="ir.ui.view">
+        <field name="name">sae.expertise.auto.form</field>
+        <field name="model">sae.expertise.auto</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <header>
+                    <button name="revenir_photo" type="object" icon="fa-refresh"/>
+                    <field name="state_expertise" widget="statusbar"/>
+                    <field name="photos_null" invisible="1"/>
+                    <field name="photos_lettre_null" invisible="1"/>
+                    <field name="lettre_null" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="type_pv" invisible="1"/>
+                    <button name="precedent" type="object" string="Précédent" class="oe_highlight"/>
+                    <button name="annule_remplace_pv" type="object" string="annule remplace" class="oe_highlight"/>
+                    <button name="suivant" type="object" string="Suivant" class="oe_highlight"
+                            attrs="{'invisible': [('state_expertise', '=', 'resm')]}"/>
+                    <button name="creer_additif" type="object" string="Créer Additif" class="oe_highlight"
+                            attrs="{'invisible': ['|','|',('type_pv', '=','additif' ),('state_expertise', '!=', 'resm'),('state', '!=', 'cloture')]}"/>
+                    <button name="cloture" type="object" string="Cloturer" class="btn-danger"
+                            attrs="{'invisible': ['|','|','|',('state_expertise', '!=', 'resm'),'|',('state', '!=', 'acpt'),('photos_lettre_null', '!=', False),('lettre_null', '!=', False),('photos_null', '!=', False)]}"/>
+                    <button name="cloture" type="object" string="Cloturer" class="btn-danger"
+                            confirm="Vous n'avez pas introduit de photos, Voulez vous continuer ?"
+                            attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),'|',('state', '!=', 'acpt'),('photos_null', '=', False)]}"/>
+                    <button name="cloture" type="object" string="Cloturer" class="btn-danger"
+                            confirm="Vous n'avez pas effectué une lettre d'invitation, Voulez vous continuer ?"
+                            attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),'|',('state', '!=', 'acpt'),('lettre_null', '=', False)]}"/>
+                    <button name="cloture" type="object" string="Cloturer" class="btn-danger"
+                            confirm="Vous n'avez pas introduit de photos ni de lettre d'invitation, Voulez vous continuer ?"
+                            attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),'|',('state', '!=', 'acpt'),('photos_lettre_null', '=', False)]}"/>
+                </header>
+                <sheet>
+
+                    <group attrs="{'invisible': [('state_expertise', '=', 'resm')]}">
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="code_agence" readonly="1"/>
+                            <field name="nom_assure" readonly="1"/>
+                            <field name="nbr_choc" invisible="1"/>
+
+                        </group>
+                        <group>
+                            <field name="reforme_bln"
+                                   attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),('type_pv', '=','additif' )]}"/>
+                            <field name="taux_vet_glbl" attrs="{'invisible': [('state_expertise', '!=', 'fourn')]}"/>
+                            <field name="instance_fact" attrs="{'invisible': [('state_expertise', '!=', 'fourn')]}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Photos" name="photos"
+                              attrs="{'invisible': [('state_expertise', '!=', 'photos')]}">
+
+                            <field name="photos_ids" widget="one2many_list" mode="tree">
+                                <tree editable="bottom" create="0">
+                                    <field name="images" widget="many2many_binary"/>
+                                    <field name="note"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Détails et Tiers" name="detail_tiers"
+                              attrs="{'invisible': [('state_expertise', '!=', 'tiers')]}">
+                            <group>
+                                <group string="Renseignements Expertise">
+                                    <field name="lieu_id" readonly="1"/>
+                                    <field name="code_lieu" invisible="1"/>
+                                    <label for="adrs_vis" string="Adresse" class="o_form_label"/>
+                                    <div attrs="{'readonly': [('code_lieu', '=', 'C')]}">
+                                        <field name="adrs_vis" placeholder="Rue"
+                                               attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                        <field name="wilaya" placeholder="Wilaya"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"
+                                               attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                        <field name="commune_id" placeholder="Commune" class="o_address_city"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"
+                                               attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                    </div>
+                                    <br/>
+                                    <field name="distance" attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                    <field name="nbr_nuit" attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                    <field name="nbr_rps" attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                    <field name="nbr_vac" attrs="{'readonly': [('code_lieu', '=', 'C')]}"/>
+                                </group>
+                                <group string="Renseignements Tiers"
+                                       attrs="{'readonly': [('type_pv', '=','additif' )]}">
+                                    <field name="nbr_tiers"/>
+                                    <field name="nom_tiers" attrs="{'readonly': [('nbr_tiers', '=',0 )]}"/>
+                                    <field name="num_plc" attrs="{'readonly': [('nbr_tiers', '=', 0)]}"/>
+                                    <field name="compagnie_tiers" attrs="{'readonly': [('nbr_tiers', '=',0 )]}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="agence_tiers" attrs="{'readonly': [('nbr_tiers', '=',0 )]}"/>
+                                    <field name="lettre_bln" attrs="{'readonly': [('nbr_tiers', '=',0 )]}"/>
+                                </group>
+                            </group>
+                            <group attrs="{'readonly': [('type_pv', '=','additif' )]}">
+                                <field name="text_lettre"
+                                       attrs="{'invisible': ['|',('lettre_bln', '=',False ),('nbr_tiers', '=',0 )]}"/>
+
+                            </group>
+
+                        </page>
+
+                        <page string="Véhicule" name="page_vehicule"
+                              attrs="{'invisible': [('state_expertise', '!=', 'vehicule')]}">
+                            <group>
+                                <button name="historique_num_chassis" type="object"
+                                        string="Historique Numéro de Chassis"/>
+                            </group>
+                            <group>
+                                <button name="changement_num_chassis" type="object"
+                                        string="Changement Numéro de Chassis"
+                                        attrs="{'invisible': [('num_chass_diff', '=', False)]}"
+                                        class="btn-danger"/>
+                            </group>
+                            <group>
+                                <group string="Identification Véhicule">
+                                    <field name="Type_imma" readonly="1"/>
+                                    <field name="num_chass_diff" invisible="1"/>
+                                    <field name="histo_num_chassis" invisible="1"/>
+                                    <field name="immatricul" readonly="1"/>
+                                    <field name="num_chas_pv"
+                                           decoration-danger="num_chass_diff == True"
+                                           decoration-warning="histo_num_chassis == True"
+                                           attrs="{'readonly': [('type_pv', '=','additif' )]}"/>
+                                    <field name="an_mec" attrs="{'readonly': [('type_pv', '=','additif' )]}"/>
+                                    <field name="kilometrage" attrs="{'readonly': [('type_pv', '=','additif' )]}"/>
+                                </group>
+
+
+                                <group string="Caractéristiques Véhicule">
+                                    <field name="mrqe_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="mdle_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="genre_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="type_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="enrg_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="carosserie_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="couleur_id"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <field name="puissance"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Description des Chocs" name="page_chocs"
+                              attrs="{'invisible': [('state_expertise', '!=', 'choc')]}">
+                            <group>
+                                <field name="chocs_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom" create="0" delete="0">
+                                        <field name="chocs_ids_domain" invisible="1"/>
+                                        <field name="classe"/>
+                                        <field name="obligatoire" invisible="1"/>
+                                        <field name="name" domain="chocs_ids_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="desc" attrs="{'required': [('obligatoire', '=', True)]}"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Description des Chocs" name="page_chocs"
+                              attrs="{'invisible': [('state_expertise', '!=', 'choc')]}">
+                            <group>
+                                <field name="chocs_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom" create="0" delete="0">
+                                        <field name="chocs_ids_domain" invisible="1"/>
+                                        <field name="classe"/>
+                                        <button name="vider" type="object" icon="fa-arrow-up" width="0.1"
+                                                confirm="Voulez vous vraiment supprimer cette ligne ?"
+                                                attrs="{'invisible': [('obligatoire', '=', False),('obligatoire_name', '=', False)]}"/>
+                                        <field name="obligatoire" invisible="1"/>
+                                        <field name="obligatoire_name" invisible="1"/>
+                                        <field name="name" domain="chocs_ids_domain"
+                                               attrs="{'required': [('obligatoire_name', '=', True)]}"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="desc" attrs="{'required': [('obligatoire', '=', True)]}"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc A" name="page_choc_A"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 1)]}">
+                            <group>
+                                <field name="choc_a" nolabel="1"
+                                       options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="reparations1_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation1_id_domain" invisible="1"/>
+
+                                        <field name="reparation_id" domain="reparation1_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '=', False)]}"
+                                               force_save="1"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+
+                        </page>
+
+                        <page string="Choc B" name="page_choc_B"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 2)]}">
+
+                            <group>
+                                <field name="choc_b" nolabel="1"/>
+                            </group>
+                            <group>
+
+                                <field name="reparations2_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation2_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="reparation2_id_domain" invisible="1"/>
+
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc C" name="page_choc_C"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 3)]}">
+
+                            <group>
+                                <field name="choc_c" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="reparations3_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation3_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="reparation3_id_domain" invisible="1"/>
+
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc D" name="page_choc_D"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 4)]}">
+                            <group>
+                                <field name="choc_d" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="reparations4_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation4_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="reparation4_id_domain" invisible="1"/>
+
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc E" name="page_choc_E"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 5)]}">
+                            <group>
+                                <field name="choc_e" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="reparations5_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation5_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                        <field name="reparation5_id_domain" invisible="1"/>
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc F" name="page_choc_F"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),'|',('reforme_bln', '=', True),('nbr_choc', '&lt;', 6)]}">
+                            <group>
+                                <field name="choc_f" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="reparations6_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="reparation_id" domain="reparation6_id_domain"
+                                               options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+
+                                        <field name="reparation6_id_domain" invisible="1"/>
+                                        <field name="duree" attrs="{'readonly': [('forfait', '!=', False)]}"/>
+                                        <field name="forfait" invisible="1"/>
+                                        <field name="montant" attrs="{'readonly': [('forfait', '!=', True)]}"
+                                               force_save="1"/>
+                                        <field name="desc"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Choc A" name="page_choc_A_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 1)]}">
+                            <group>
+                                <field name="choc_a" nolabel="1"/>
+
+                            </group>
+
+                            <field name="fournitures1_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom">
+
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <!--                                    <button name="choisir_piece" type="object" icon="fa-search" width="0.1" disable="False"/>-->
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht" force_save="1"/>
+
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc B" name="page_choc_B_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;',2)]}">
+                            <group>
+                                <field name="choc_b" nolabel="1"/>
+                            </group>
+                            <field name="fournitures2_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <!--                                    <button name="choisir_piece" type="object" icon="fa-exchange" width="0.1"/>-->
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht" force_save="1"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc C" name="page_choc_C_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 3)]}">
+                            <group>
+                                <field name="choc_c" nolabel="1"/>
+                            </group>
+                            <field name="fournitures3_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <!--                                    <button name="choisir_piece" type="object" icon="fa-search" width="0.1"/>-->
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht" force_save="1"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc D" name="page_choc_D_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 4)]}">
+                            <group>
+                                <field name="choc_d" nolabel="1"/>
+                            </group>
+                            <field name="fournitures4_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <!--                                    <button name="choisir_piece" type="object" icon="fa-search" width="0.1"/>-->
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc E" name="page_choc_E_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 5)]}">
+                            <group>
+                                <field name="choc_e" nolabel="1"/>
+                            </group>
+                            <field name="fournitures5_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <!--                                    <button name="choisir_piece" type="object" icon="fa-search" width="0.1"/>-->
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Choc F" name="page_choc_F_fourn"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'fourn'),('nbr_choc', '&lt;', 6)]}">
+                            <group>
+                                <field name="choc_f" nolabel="1"/>
+                            </group>
+                            <field name="fournitures6_ids" widget="one2many_list" mode="tree" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="piece_id"
+                                           context="{'search_default_marque_id': parent.mrqe_id,'search_default_mdl_id': parent.mdle_id,'search_default_annee': parent.an_mec,'search_view_ref': 'expertise_auto_sae.piece_line_search_sub'}"
+                                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                                    <!--                                           domain=" [('annee', '=',  parent.an_mec), ('marque_id', '=', parent.mrqe_id),('mdl_id', '=',parent.mdle_id)]"-->
+
+                                    <!--                                    <button name="choisir_piece" type="object" icon="fa-exchange" width="0.1"/>-->
+                                    <field name="vetuste"/>
+                                    <field name="taux_vet"/>
+                                    <field name="prix_ht"/>
+                                    <button name="choisir_prix" type="object" icon="fa-exchange" width="0.1"/>
+                                    <field name="quantite"/>
+                                    <field name="montant_ht"/>
+                                    <field name="taxe_id" options="{'no_create': True}"/>
+                                    <field name="montant_tva"/>
+                                    <field name="montant_ttc"/>
+                                    <field name="type_montant"/>
+                                </tree>
+                            </field>
+                        </page>
+
+
+                        <page string="Réforme" name="refo_rme"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'rep'),('reforme_bln', '!=', True)]}">
+                            <group>
+                                <field name="type_ref"/>
+                                <field name="desc_ref"/>
+                                <field name="val_venale"/>
+                                <field name="val_epave" attrs="{'invisible': [('type_ref', '=', 'Vol')]}"/>
+                                <field name="montant_pre" attrs="{'invisible': [('type_ref', '=', 'Vol')]}"/>
+                            </group>
+                        </page>
+
+                        <page string="Synthèse" name="synthese"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),('reforme_bln', '=', True)]}">
+                            <group string="Résumé des Chocs">
+                                <field name="resume_chocs_ids" widget="one2many_list" mode="tree" nolabel="1"
+                                       force_save="1" readonly="1">
+                                    <tree editable="bottom">
+                                        <field name="classe"/>
+                                        <field name="choc"/>
+                                        <field name="main_d_oeuvre"/>
+                                        <field name="peinture"/>
+                                        <field name="montant_ht"/>
+                                        <field name="montant_tva"/>
+                                        <field name="montant_ttc"/>
+                                        <field name="immo"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <group string="Résumé Global">
+                                    <field name="total_main_d_oeuvre" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="total_peinture" widget='monetary'/>
+                                    <field name="total_ht" widget='monetary'/>
+                                    <field name="total_tva" widget='monetary'/>
+                                    <field name="total_four_ttc" string="TTC Fournitures sans Vétusté"
+                                           widget='monetary'/>
+                                    <field name="total_four_ttc" string="TTC Fournitures avec Vétusté"
+                                           widget='monetary'/>
+                                    <field name="total_immo"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="total_ttc" widget='monetary'/>
+                                    <field name="total_ttc_text"/>
+                                    <br/>
+
+                                </group>
+                                <group string="infos supplémentaires">
+                                    <field name="etat_vehi"/>
+                                    <field name="val_venale_syn" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="taux_vet"/>
+                                    <field name="val_vet" widget='monetary'/>
+                                    <field name="obsrv_pv"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Synthèse" name="synthese_ref"
+                              attrs="{'invisible': ['|',('state_expertise', '!=', 'resm'),('reforme_bln', '!=', True)]}">
+                            <group string="Synthèse Réforme">
+                                <field name="val_venale"/>
+                                <field name="val_epave" attrs="{'invisible': [('type_ref', '=', 'Vol')]}"/>
+                                <field name="montant_pre" attrs="{'invisible': [('type_ref', '=', 'Vol')]}"/>
+                                <field name="obsrv_pv"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="record_form_sae_expertise_auto_cloture_remplace" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_traitement_expertise_form_annule_et_remplace_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_cloture_annule_remplace"/>
+    </record>
+    <record id="sae_traitement_expertise_view_tree" model="ir.ui.view">
+        <field name="name">sae.expertise.auto.tree</field>
+        <field name="model">sae.expertise.auto</field>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="name"/>
+                <field name="compagnie"/>
+                <field name="code_agence"/>
+                <field name="nom_assure"/>
+                <field name="type_pv"/>
+                <field name="nbr_choc"/>
+                <field name="state_expertise"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_traitement_expertise_pv_expert" model="ir.actions.act_window">
+        <field name="name">Traitement Expertise</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="domain">[('state', '=', 'acpt')]</field>
+        <!--        ,('expert_id.user_id', '=', uid)-->
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Ajouter un Nouveau Traitement d'expertise
+            </p>
+        </field>
+    </record>
+    <record id="action_cloture_expertise_pv_expert" model="ir.actions.act_window">
+        <field name="name">Traitement Expertise des Dossiers Cloturés</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="domain">[('state', '=', 'cloture')]</field>
+        <!--        ,('expert_id.user_id', '=', uid)-->
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Ajouter un Nouveau Traitement d'expertise
+            </p>
+        </field>
+    </record>
+    <record id="action_sae_traitement_expertise_pv_btn" model="ir.actions.act_window">
+        <field name="name">Traitement Expertise</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="domain">[('id', '=', context.get('id'))]</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Ajouter un Nouveau Traitement d'expertise
+            </p>
+        </field>
+    </record>
+    <record id="action_sae_traitement_expertise_accpt" model="ir.actions.act_window">
+        <field name="name">Traitement Expertise</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Ajouter un Nouveau Traitement d'expertise
+            </p>
+        </field>
+    </record>
+    <!--    <record id="record_tree_expertise_pv_id" model="ir.actions.act_window.view">-->
+    <!--        <field eval="1" name="sequence"/>-->
+    <!--        <field name="view_mode">tree</field>-->
+    <!--        <field name="view_id" ref="sae_traitement_expertise_view_tree"/>-->
+    <!--        <field name="act_window_id" ref="action_sae_traitement_expertise_pv_btn"/>-->
+    <!--    </record>-->
+    <record id="record_form_expertise_pv_btn_id" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_traitement_expertise_form_view"/>
+        <field name="act_window_id" ref="action_sae_traitement_expertise_pv_btn"/>
+    </record>
+    <record id="record_form_expertise_pv_id_expert" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_traitement_expertise_form_view"/>
+        <field name="act_window_id" ref="action_traitement_expertise_pv_expert"/>
+    </record>
+    <record id="record_tree_expertise_pv_id_expert" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_traitement_expertise_view_tree"/>
+        <field name="act_window_id" ref="action_traitement_expertise_pv_expert"/>
+    </record>
+    <record id="record_two_form_id" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_traitement_expertise_form_view"/>
+        <field name="act_window_id" ref="action_sae_traitement_expertise_accpt"/>
+    </record>
+    <record id="record_tree_expertise_pv_id_expert_cloture" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_traitement_expertise_view_tree"/>
+        <field name="act_window_id" ref="action_cloture_expertise_pv_expert"/>
+    </record>
+    <record id="record_two_form_id_cloture" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_traitement_expertise_form_view"/>
+        <field name="act_window_id" ref="action_cloture_expertise_pv_expert"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="view_creation_csv_wizard" model="ir.ui.view">
+        <field name="name">Wizard</field>
+        <field name="model">creation.csv.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                        <group string="Fichier CSV">
+
+                            <field name="csvf"/>
+                        </group>
+
+                        <group string="Create">
+                            <button name="doo" type="object" string="create" class="oe_highlight"/>
+
+                        </group>
+
+
+
+
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_creation_csv_wizard">
+        <field name="name">Création CSV</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">creation.csv.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_creation_csv_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

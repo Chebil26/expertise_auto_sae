@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--sae_expertise_auto-->
+    <record id="sae_expertise_auto_form_view" model="ir.ui.view">
+        <field name="name">sae.expertise.auto.form</field>
+        <field name="model">sae.expertise.auto</field>
+        <field name="arch" type="xml">
+            <form  create="false">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <field name="type_nature" invisible="1"/>
+
+                    <button name="accepter" type="object" string="Accepter" class="oe_highlight"
+                            attrs="{'invisible': [ ('state', 'not in', 'cree')]}"
+                            confirm="Traitement de Dossier: Confirmer le démarrage du dossier"/>
+                    <button name="reaffectation" type="object" string="Reaffectation de l'expert" class="oe_highlight"/>
+                    <button name="changement_lieu" type="object" string="Changement de lieu de visite"
+                            class="oe_highlight" attrs="{'invisible': [('state', '!=', 'cree')]}"/>
+                    <button name="annuler" type="object" string="Annuler ODS" class="oe_highlight"/>
+
+
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                                name="traitement_expertise_sinistre"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                string="Traitement Expertise"
+                                attrs="{'invisible': ['|',('type_nature', '!=', 'sinistre'),('state', '!=', 'acpt')]}">
+                        </button>
+                        <button
+                                name="traitement_expertise_sinistre"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                string="Mettre à Jour PV"
+                                attrs="{'invisible': ['|',('type_nature', '!=', 'sinistre'),('state', '!=', 'cloture')]}">
+                        </button>
+                        <button
+                                name="traitement_expertise_avis"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                string="Traitement Expertise"
+                                attrs="{'invisible': ['|',('type_nature', '!=', 'avis'),('state', '!=', 'acpt')]}">
+                        </button>
+                    </div>
+                    <group>
+                        <group string="Renseignements Client">
+                            <field name="compagnie" options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                            <field name="code_agence_domain" invisible="1"/>
+                            <field name="code_agence" domain="code_agence_domain" options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                            <field name="date_ods"/>
+                            <field name="num_ods"/>
+                            <field name="nom_assure"/>
+                            <field name="contact"/>
+                        </group>
+                        <group string="Renseignements Sinistre"
+                               attrs="{'invisible': [('type_nature', '!=', 'sinistre')]}">
+
+                            <field name="date_sinistre" attrs="{'required': [('type_nature', '=', 'sinistre')]}"/>
+                            <field name="num_sinistre" attrs="{'required': [('type_nature', '=', 'sinistre')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Renseignements Expertise">
+                            <field name="operating_unit_domain" invisible="1"/>
+                            <field name="operating_unit" domain="operating_unit_domain" options="{'no_create': True,'no_open': True, 'no_create_edit':True}"/>
+                            <field name="expert_id" attrs="{'readonly': [('id', '!=', False)]}"  options="{'no_create': True,'no_open': True, 'no_create_edit':True}"/>
+                            <field name="nature_id" options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                            <field name="lieu_id" options="{'no_create': True, 'no_create_edit':True,'no_open': True}"
+                                   attrs="{'readonly': [('id', '!=', False)]}"/>
+                        </group>
+                        <group string="Renseignements Véhicule" attrs="{'invisible': [('type_nature', '!=', 'sinistre')]}">
+                            <field name="Type_imma"  attrs="{'required': [('type_nature', '=', 'sinistre')],'invisible': [('type_nature', '!=', 'sinistre')]}"/>
+                            <field name="immatricul"  attrs="{'required': [('type_nature', '=', 'sinistre')],'invisible': [('type_nature', '!=', 'sinistre')]}"/>
+                            <field name="num_chas"  attrs="{'required': [('type_nature', '=', 'sinistre')],'invisible': [('type_nature', '!=', 'sinistre')]}"/>
+                        </group>
+                    </group>
+                    <field name="obsrv"/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="sae_expertise_auto_view_tree" model="ir.ui.view">
+        <field name="name">sae.expertise.auto.tree</field>
+        <field name="model">sae.expertise.auto</field>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="name"/>
+                <field name="compagnie"/>
+                <field name="date_ods"/>
+                <field name="nom_assure"/>
+                <field name="date_sinistre"/>
+                <field name="num_sinistre"/>
+                <field name="expert_id"/>
+                <field name="nature_id"/>
+                <field name="lieu_id"/>
+                <field name="Type_imma"/>
+                <field name="immatricul"/>
+                <field name="state" decoration-success="state == 'acpt'" decoration-info="state == 'cree'"
+                       decoration-danger="state == 'annule'" decoration-warning="state == 'cloture'" widget="badge"
+                       optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_expertise_auto_crea" model="ir.actions.act_window">
+        <field name="name">ODS Enregistrés</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'cree')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Cree un nouveau ODS
+            </p>
+        </field>
+    </record>
+
+    <record id="action_sae_expertise_auto_acpt" model="ir.actions.act_window">
+        <field name="name">ODS Encours de Traitement</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'acpt')]</field>
+        <!--        ,('expert_id.user_id', '=', uid)-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Cree un nouveau ODS
+            </p>
+        </field>
+    </record>
+
+    <record id="action_sae_expertise_auto_crea_expert" model="ir.actions.act_window">
+        <field name="name">ODS En Instances</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'cree')]</field>
+        <!--        ,('expert_id.user_id', '=', uid)-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Cree un nouveau ODS
+            </p>
+        </field>
+    </record>
+
+    <record id="action_sae_expertise_auto_annule_expert" model="ir.actions.act_window">
+        <field name="name">ODS Annulés</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'annule')]</field>
+        <!--        ,('expert_id.user_id', '=', uid)-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Cree un nouveau ODS
+            </p>
+        </field>
+    </record>
+
+    <record id="action_sae_expertise_auto_annule" model="ir.actions.act_window">
+        <field name="name">ODS Annulés</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'annule')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Cree un nouveau ODS
+            </p>
+        </field>
+    </record>
+
+    <record id="view_sae_expertise_auto_kanban" model="ir.ui.view">
+        <field name="name">sae.expertise.auto.kanban</field>
+        <field name="model">sae.expertise.auto</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="compagnie"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="compagnie"/>
+                                </strong>
+
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_sae_expertise_auto" model="ir.actions.act_window">
+        <field name="name">Expertise Automobile</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+
+            </p>
+        </field>
+    </record>
+    <record id="action_sae_expertise_auto_creation_dossier" model="ir.actions.act_window">
+        <field name="name">Création de Dossier</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+
+            </p>
+        </field>
+    </record>
+
+    <record id="record_form_sae_expertise_auto_creation_dossier_id" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_expertise_auto_form_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_creation_dossier"/>
+    </record>
+ <record id="record_tree_sae_expertise_auto_id" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_expertise_auto_view_tree"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto"/>
+    </record>
+
+    <record id="record_form_sae_expertise_auto_id" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_expertise_auto_form_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto"/>
+    </record>
+
+    <record id="record_tree_sae_expertise_auto_crea_id" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_expertise_auto_view_tree"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_crea"/>
+    </record>
+
+    <record id="record_form_sae_expertise_auto_crea_id" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_expertise_auto_form_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_crea"/>
+    </record>
+
+    <record id="record_tree_sae_expertise_auto_acpt_id" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_expertise_auto_view_tree"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_acpt"/>
+    </record>
+
+    <record id="record_form_sae_expertise_auto_acpt_id" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_expertise_auto_form_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_acpt"/>
+    </record>
+
+    <record id="record_tree_sae_expertise_auto_acpt_expert_id" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_expertise_auto_view_tree"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_crea_expert"/>
+    </record>
+
+    <record id="record_form_sae_expertise_auto_acpt_expert_id" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_expertise_auto_form_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_crea_expert"/>
+    </record>
+
+    <record id="record_tree_sae_expertise_auto_annule_expert_id" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_expertise_auto_view_tree"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_annule_expert"/>
+    </record>
+
+    <record id="record_form_sae_expertise_auto_annule_expert_id" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_expertise_auto_form_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_annule_expert"/>
+    </record>
+
+    <record id="record_tree_sae_expertise_auto_annule_id" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_expertise_auto_view_tree"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_annule"/>
+    </record>
+
+    <record id="record_form_sae_expertise_auto_annule_id" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_expertise_auto_form_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_annule"/>
+    </record>
+    <record id="action_sae_expertise_auto_cloture" model="ir.actions.act_window">
+        <field name="name">ODS Cloturés</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'cloture')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun ODS Cloturé
+            </p>
+        </field>
+    </record>
+    <record id="action_sae_expertise_auto_cloture_maj" model="ir.actions.act_window">
+        <field name="name">Mise à Jour ODS</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'cloture'),('note_honoraire_ids.state', '=', 'draft'),('date_cloture', '=', current_date)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun ODS à Mettre à jour.
+            </p>
+        </field>
+    </record>
+    <record id="action_sae_expertise_auto_cloture_correction" model="ir.actions.act_window">
+        <field name="name">Correction ODS</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">['|','&amp;','&amp;',('state', '=', 'cloture'),('note_honoraire_ids.state', '!=', 'draft'),('note_honoraire_ids.payment_state', '=', 'paid'),('note_honoraire_ids.payment_state', '=', 'partial')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun ODS à Corriger.
+            </p>
+        </field>
+    </record>
+   <record id="action_sae_expertise_auto_cloture_annule_remplace" model="ir.actions.act_window">
+        <field name="name">Annule et Remplace ODS</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.expertise.auto</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">['&amp;','&amp;','&amp;','&amp;',('date_cloture', '&lt;', current_date),('note_honoraire_ids.state', '!=', 'draft'),('state', '=', 'cloture'),('note_honoraire_ids.payment_state', '!=', 'paid'),('note_honoraire_ids.payment_state', '!=', 'partial')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun ODS à remplacer.
+            </p>
+        </field>
+    </record>
+    <record id="record_tree_sae_expertise_auto_cloture_id" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_expertise_auto_view_tree"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_cloture_maj"/>
+    </record>
+
+    <record id="record_form_sae_expertise_auto_cloture_id" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_expertise_auto_form_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_cloture_maj"/>
+    </record>
+   <record id="record_tree_sae_expertise_auto_cloture_corr" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_expertise_auto_view_tree"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_cloture_correction"/>
+    </record>
+
+    <record id="record_form_sae_expertise_auto_cloture_corr" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sae_expertise_auto_form_view"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_cloture_correction"/>
+    </record>
+ <record id="record_tree_sae_expertise_auto_cloture_remplace" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="sae_expertise_auto_view_tree"/>
+        <field name="act_window_id" ref="action_sae_expertise_auto_cloture_annule_remplace"/>
+    </record>
+
+
+</odoo>

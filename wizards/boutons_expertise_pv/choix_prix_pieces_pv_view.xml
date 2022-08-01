@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_choix_piece_prix_wizard" model="ir.ui.view">
+        <field name="name">Wizard</field>
+        <field name="model">choix.prix.piece.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+
+                    <field name="amount_min" readonly="1" attrs="{'invisible': [('type_montant', '=', 'a_saisir')]}"/>
+                    <field name="amount_moy"  readonly="1" attrs="{'invisible': [('type_montant', '=', 'a_saisir')]}"/>
+                    <field name="amount_max"  readonly="1" attrs="{'invisible': [('type_montant', '=', 'a_saisir')]}"/>
+                    <field name="amount_facture"  readonly="1" attrs="{'invisible': [('type_montant', '=', 'a_saisir')]}"/>
+                    <field name="type_montant"/>
+                    <field name="amount_saisi" attrs="{'invisible': [('type_montant', 'not in', ['a_saisir_h','a_saisir_t'])]}"/>
+                </group>
+                <footer>
+                    <button name="confirmer" string="Confirmer" type="object" class="oe_highlight"/>
+                    <button string="Annuler" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_choix_piece_prix_wizard">
+        <field name="name">Pièces PV Simple</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">choix.prix.piece.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_choix_piece_prix_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

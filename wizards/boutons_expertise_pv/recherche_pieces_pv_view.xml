@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_liste_recherche_prix_wizard" model="ir.ui.view">
+        <field name="name">Wizard</field>
+        <field name="model">sae.recherche.piece.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <field name="marque_id" options="{'no_open': True, 'no_create': True}"
+                                   placeholder="Rechercher Une Marque..."
+
+                            />
+                            <field name="modele_id" options="{'no_open': True, 'no_create': True}"
+                                   placeholder="Rechercher un Modèle..."
+
+                            />
+                            <field name="annee" placeholder="Rechercher une année..."
+                            />
+                            <field name="designation_piece" placeholder="Rechercher La Pièce..."
+                            />
+                            <field name="num_fourniture" invisible="1"/>
+
+                        </group>
+
+                        <group>
+
+                            <br/>
+                            <br/>
+                            <button name="vider_modele" type="object" icon="fa-minus"/>
+                            <br/>
+                            <button name="vider_annee" type="object" icon="fa-minus"/>
+                            <br/>
+                            <button name="rechercher" type="object" string="Rechercher" icon="fa-search"
+                                    class="oe_highlight"/>
+                        </group>
+
+
+                    </group>
+
+
+                    <field name="liste_pieces_ids" mode="tree" nolabel="1"
+                           options="{'no_create': True}">
+                        <tree editable="bottom" create="false">
+                            <field name="is_checked" nolabel="1"/>
+                            <field name="piece_id"/>
+                            <field name="marque_id"/>
+                            <field name="mdl_id"/>
+                            <field name="annee"/>
+                            <field name="taxe_id" invisible="1"/>
+                            <field name="amount_min"/>
+                            <field name="amount_moy"/>
+                            <field name="amount_max"/>
+                            <field name="amount_fact"/>
+                            <field name="vetuste"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="confirmer_creation_piece" string="Confirmer" type="object" class="oe_highlight"/>
+
+                    <button string="Annuler" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<odoo>
+
+
+    <record id="sae_motif_raison_form_view" model="ir.ui.view">
+        <field name="name">sae.motif.raison.form</field>
+        <field name="model">sae.motif.raison</field>
+        <field name="arch" type="xml">
+            <form string="Raison d'annulation">
+                <sheet>
+                    <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="name"/>
+                        </div>
+                        <h1 class="mb32">
+                            <field name="name" class="mb16"/>
+                        </h1>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sae_motif_raison_tree_view" model="ir.ui.view">
+        <field name="name">sae.motif.raison.tree</field>
+        <field name="model">sae.motif.raison</field>
+        <field name="arch" type="xml">
+            <tree  editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sae_motif_raison" model="ir.actions.act_window">
+        <field name="name">Motif d'Annulation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sae.motif.raison</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Cliquez ici pour ajouter un Lieu de Visite.
+            </p>
+        </field>
+    </record>
+
+</odoo>

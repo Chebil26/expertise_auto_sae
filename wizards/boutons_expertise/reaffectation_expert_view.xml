@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_reaffectation_expert_wizard" model="ir.ui.view">
+        <field name="name">Wizard</field>
+        <field name="model">reaffectation.expert.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+
+                    <group>
+                        <field name="expert_ancien_id"/>
+                        <field name="expert_id" options="{'no_create': True, 'no_create_edit':True}"/>
+                    </group>
+
+                </group>
+                <footer>
+                    <button name="confirmer" string="Confirmer" type="object" class="oe_highlight"/>
+                    <button name="annuler" string="Annuler" type="object" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_reaffectation_expert_wizard">
+        <field name="name">Réaffectation de l'expert</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">reaffectation.expert.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_reaffectation_expert_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

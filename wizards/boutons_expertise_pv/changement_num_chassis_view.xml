@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_changer_num_chassis_wizard" model="ir.ui.view">
+        <field name="name">Wizard</field>
+        <field name="model">changer.num.chassis.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+
+                    <group>
+                        <field name="num_chas_pv_ancien"/>
+                        <field name="num_chas_pv"/>
+                    </group>
+
+                </group>
+                <footer>
+                    <button name="maj_chas_pv_ancien" string="Valider Vin Expert " type="object" class="oe_highlight"
+                            confirm="Veuillez confirmer le Changement du Numéro de Chassis."/>
+                    <button name="maj_chas_num_chas_pv" string="Valider Vin Réception" type="object" class="oe_highlight"
+                            confirm="Veuillez confirmer le Changement du Numéro de Chassis."/>
+
+                    <button string="Annuler" class="btn-default" special="cancel"/>
+
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

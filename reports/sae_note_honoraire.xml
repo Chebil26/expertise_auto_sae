@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report
+                id="note_hono_auto_report"
+                string="Note d'honoraires"
+                model="sae.expertise.auto"
+                report_type="qweb-pdf"
+                file="expertise_auto_sae.hn_auto"
+                name="expertise_auto_sae.hn_auto"
+                menu="True"
+        />
+
+
+        <template id="hn_auto">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs.note_honoraire_ids" t-as="o">
+                    <div class="page">
+                        <style>
+                            h3
+                            {font-weight : thick;
+                            text-align : center;}
+                            .text-left
+                            { text-align : left; }
+
+                            .text-right{
+
+                            text-align : right;
+                            }
+                            #expand-box-header {
+                            margin: 0;
+                            padding: 0 0 3px 2px;
+                            overflow: auto;}
+                            .table, td ,th {
+                            border: 1px solid black;
+                            border-color : black;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            }
+                        </style>
+
+                        <div class="header">
+                            <div class="row" style="width: 100%;">
+
+                                <img t-if="user.company_id.logo" src='/web/binary/company_logo'
+                                     style="max-height:3cm; max-width:5cm;"/>
+                                <center>
+                                    <h3>الشركة الجزائرية للخبرة و المراقبة التقنية للسيارات</h3>
+                                    <h3>Société Algérienne d'Expertise et du Contrôle Technique Automobile</h3>
+                                </center>
+
+                            </div>
+                        </div>
+                        <center>Centre d'expertise :
+                            <b>
+                                <span t-esc="user.default_operating_unit_id.name"/>
+                            </b>
+                        </center>
+                        <br/>
+                        <div class="row" style="width: 100%;">
+
+                            <div class="col-5">
+                                <b>RC :
+                                    <span t-esc="user.default_operating_unit_id.rc"/>
+                                </b>
+                                <br/>
+                                <b>NIF :
+                                    <span t-esc="user.default_operating_unit_id.nif"/>
+                                </b>
+                                <br/>
+                                <b>RIB :
+                                    <span t-esc="user.default_operating_unit_id.rib"/>
+                                </b>
+                                <br/>
+                            </div>
+                            <div class="col-5">
+                                <b>AI :
+                                    <span t-esc="user.default_operating_unit_id.ai"/>
+                                </b>
+                                <br/>
+                                <b>NIS :
+                                    <span t-esc="user.default_operating_unit_id.nis"/>
+                                </b>
+                                <br/>
+                            </div>
+                        </div>
+                        <center>
+                            <h2>
+                                <b>NOTE D'HONORAIRES</b>
+                            </h2>
+                        </center>
+                        <br/>
+                        <div class="row" style="width: 100%;">
+
+                            <div style="width: 50%;">
+                                Client :
+                                <b>
+                                    <span t-esc="o.dossier_ods.compagnie.name"/>
+                                </b>
+                                <br/>
+                                N° ODS :
+                                <b>
+                                    <span t-esc="o.dossier_ods.num_ods"/>
+                                </b>
+                                <br/>
+                                Assuré :
+                                <b>
+                                    <span t-esc="o.dossier_ods.nom_assure"/>
+                                </b>
+                                <br/>
+                                N° Sinistre :
+                                <b>
+                                    <span t-esc="o.dossier_ods.num_sinistre"/>
+                                </b>
+                                <br/>
+                                N° Dossier :
+                                <b>
+                                    <span t-esc="o.dossier_ods.name"/>
+                                </b>
+                                <br/>
+                                Montant :
+                                <b>
+                                    <span t-esc="o.dossier_ods.total_ttc"/>
+                                </b>
+                                <br/>
+
+                            </div>
+                            <div style="width: 50%;">
+                                Code :
+                                <b>
+                                    <span t-esc="o.dossier_ods.code_agence.name"/>
+                                </b>
+                                <br/>
+                                N° Police :
+                                <br/>
+                                Tiers :
+                                <br/>
+                                Date Sinistre :
+                                <b>
+                                    <span t-esc="o.dossier_ods.date_sinistre"/>
+                                </b>
+                                <br/>
+
+                                Expert :
+                                <b>
+                                    <span t-esc="user.name"/>
+                                </b>
+                                <br/>
+                            </div>
+                        </div>
+                        <table style="width: 100%;">
+                            <tr style="text-align: center;">
+                                <td style="background :#E8E8E8">
+                                    <b>Désignation</b>
+                                </td>
+
+                                <td style="background :#E8E8E8">
+                                    <b>Nombre</b>
+                                </td>
+                                <td style="background :#E8E8E8">
+                                    <b>P.U</b>
+                                </td>
+                                <td style="background :#E8E8E8">
+                                    <b>Montant HT</b>
+                                </td>
+                            </tr>
+                            <t t-foreach="o.invoice_line_ids" t-as="line">
+                                <tr>
+
+                                    <td>
+                                        <span t-esc="line.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.quantity"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.price_unit"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.price_subtotal"/>
+                                    </td>
+                                </tr>
+
+                            </t>
+                        </table>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div class="row"  style="width: 100%;">
+                            <div style="text-align: left;width: 50%;"></div>
+                            <div style="text-align: right;width: 50%;">
+                                <table>
+                                    <tr>
+                                        <td>Total HT</td>
+                                        <td>
+                                            <span t-esc="o.amount_untaxed"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total TVA</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total TTC</td>
+                                        <td>
+                                            <span t-esc="o.amount_total"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div class="footer">
+                            <center>
+                                مؤسسة بالأسهم ذات رأس مال 540 مليون دينار جزائري رقم السجل التجاري 98 ب 3058 المقر
+                                الرئيسي طريق دالي إبراهيم الشراقة الجزائر
+                                <br/>
+                                Société par actions au capital social de 540 millions de dinars -RC N° 98 B 3058-Route
+                                de Delly Ibrahim cheraga
+                                <br/>
+                                ALGER TEL 021.36.23.99- 021.36.27.25-021.36.17.03-FAX 021.36.17.03-021.36.17.12
+                                <br/>
+                            </center>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+
+
+
+
+
+

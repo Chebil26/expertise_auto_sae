@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--        cet ID sera utilisé si on veut imprimer le PV seulement-->
+        <report
+                id="pv_expert_auto_report"
+                string="PV d'Expertise Automobile"
+                model="sae.expertise.auto"
+                report_type="qweb-pdf"
+                file="expertise_auto_sae.pv_auto"
+                name="expertise_auto_sae.pv_auto"
+                menu="True"
+        />
+        <!--        cet ID sera utilisé si on veut imprimer et le PV et La Note-->
+
+        <report
+                id="pv_expert_auto_report2"
+                string="PV d'Expertise Automobile 2"
+                model="sae.expertise.auto"
+                report_type="qweb-pdf"
+                file="expertise_auto_sae.pv_auto2"
+                name="expertise_auto_sae.pv_auto2"
+                menu="False"
+        />
+
+
+        <template id="pv_auto">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <style>
+                            h3
+                            {font-weight : thick;
+                            text-align : center;}
+                            .text-left
+                            { text-align : left; }
+
+                            .text-right{
+
+                            text-align : right;
+                            }
+                            #expand-box-header {
+                            margin: 0;
+                            padding: 0 0 3px 2px;
+                            overflow: auto;}
+                            .table, td ,th {
+                            border: 1px solid black;
+                            border-color : black;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            }
+                        </style>
+                        <div class="header">
+                            <div class="row" style="width: 100%;">
+
+                                <img t-if="user.company_id.logo" src='/web/binary/company_logo'
+                                     style="max-height:3cm; max-width:5cm;"/>
+                                <center>
+                                    <h3>الشركة الجزائرية للخبرة و المراقبة التقنية للسيارات</h3>
+                                    <h3>Société Algérienne d'Expertise et du Contrôle Technique Automobile</h3>
+                                </center>
+
+                            </div>
+                        </div>
+                        <div class="row" style="width: 100%;">
+                            <div class="col-5">
+                                <span>Centre d'Expertise
+                                    <span t-esc="user.default_operating_unit_id.name"/>
+                                </span>
+                                <br/>
+                                <span>Lieu de Visite
+                                    <span t-esc="o.lieu_id.name"/>
+                                </span>
+                            </div>
+                            <div class="col-5">
+                                <span>Procs-Verbal d'Expertise N°
+                                    <span t-esc="o.name"/>
+                                </span>
+                                <br/>
+                                <span>Etabli le
+
+                                </span>
+                                <span>Expert
+                                    <span t-esc="user.name"/>
+                                </span>
+                            </div>
+                        </div>
+                        <table style="width: 100%;">
+                            <tr style="text-align: center;">
+                                <td style="background :#E8E8E8">
+                                    <b>Mandant</b>
+                                </td>
+
+                                <td style="background :#E8E8E8">
+                                    <b>Véhicule</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <span>Agence
+
+                                            </span>
+                                            <br/>
+                                            <span>N°
+
+                                            </span>
+                                            <br/>
+                                            <span>Assur
+
+                                            </span>
+                                            <br/>
+                                            <span>Assureur
+
+                                            </span>
+                                            <br/>
+                                            <span>N° Police
+
+                                            </span>
+
+                                        </div>
+                                        <div class="col-5">
+                                            <span>Code
+
+                                            </span>
+                                            <br/>
+                                            <span>Date
+
+                                            </span>
+                                            <br/>
+                                            <span>Tiers
+
+                                            </span>
+                                            <br/>
+                                            <span>Agence
+
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <span>Marque
+                                                <span t-esc="o.mrqe_id.name"/>
+                                            </span>
+                                            <span>Modèl
+                                                <span t-esc="o.mdle_id.name"/>
+                                            </span>
+                                            <br/>
+                                            <span>N° Serie
+                                                <span t-esc="o.num_chas"/>
+
+                                            </span>
+                                            <br/>
+                                            <span>Immatri
+                                                <span t-esc="o.immatricul"/>
+
+                                            </span>
+                                            <br/>
+                                            <span>Energie
+                                                <span t-esc="o.enrg_id.name"/>
+
+                                            </span>
+                                            <br/>
+                                            <span>Carosserie
+                                                <span t-esc="o.carosserie_id.name"/>
+
+                                            </span>
+                                        </div>
+
+                                        <div class="col-5">
+                                            <span>Genre
+                                                <span t-esc="o.genre_id.name"/>
+
+                                            </span>
+                                            <br/>
+                                            <span>Puissanc
+                                                <span t-esc="o.puissance"/>
+
+                                            </span>
+                                            <br/>
+                                            <span>Année
+                                                <span t-esc="o.an_mec"/>
+
+                                            </span>
+                                            <br/>
+                                            <span>Couleur
+                                                <span t-esc="o.couleur_id.name"/>
+
+                                            </span>
+                                            <br/>
+                                            <span>Etat
+                                                <span t-field="o.etat_vehi"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width: 100%;">
+
+                            <tr style="text-align: center;">
+                                <td style="background :#E8E8E8">
+                                    <b>Description du choc</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <t t-foreach="o.chocs_ids" t-as="choc">
+                                        <t t-if="choc.name">
+                                            <b>
+                                                <span t-esc="choc.name.name"/>
+                                            </b>
+                                            <br/>
+                                            <span t-esc="choc.desc"/>
+                                        </t>
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 60%;background :#E8E8E8;">
+                                    <b>Evaluation de la remise en état</b>
+                                </td>
+                                <td style="width: 25%;background :#E8E8E8;">
+                                    <b>Taux Horaire</b>
+                                </td>
+                                <td style="width: 15%;background :#E8E8E8;">
+                                    <t t-if="o.total_heures" t-set="taux_hor"
+                                       t-value="o.total_main_d_oeuvre/o.total_heures"/>
+                                    <b><span t-esc="taux_hor"/>DA
+                                    </b>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 65%;background :#E8E8E8;">
+                                    <b>Détails des réparations</b>
+                                </td>
+                                <td style="width: 20%;background :#E8E8E8;">
+                                    <b>T/REP</b>
+                                </td>
+                                <td style="width: 15%;background :#E8E8E8;">
+                                    <b>Montant</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <t t-if="o.nbr_choc &gt; 0 " t-foreach="o.reparations1_ids" t-as="reparation">
+
+                                        <div class="row">
+                                            <b class="col-5">
+                                                <span t-esc="o.choc_a.name"/>
+                                            </b>
+                                            <b class="col-5">
+                                                <span t-esc="reparation.reparation_id.famille_repa.name"/>
+                                            </b>
+                                        </div>
+                                        <span t-field="reparation.desc"/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 1 " t-foreach="o.reparations2_ids" t-as="reparation">
+
+                                        <div class="row">
+                                            <b class="col-5">
+                                                <span t-esc="o.choc_b.name"/>
+                                            </b>
+                                            <b class="col-5">
+                                                <span t-esc="reparation.reparation_id.famille_repa.name"/>
+                                            </b>
+                                        </div>
+                                        <span t-field="reparation.desc"/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 2 " t-foreach="o.reparations3_ids" t-as="reparation">
+
+                                        <div class="row">
+                                            <b class="col-5">
+                                                <span t-esc="o.choc_c.name"/>
+                                            </b>
+                                            <b class="col-5">
+                                                <span t-esc="reparation.reparation_id.famille_repa.name"/>
+                                            </b>
+                                        </div>
+                                        <span t-field="reparation.desc"/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 3 " t-foreach="o.reparations4_ids" t-as="reparation">
+
+                                        <div class="row">
+                                            <b class="col-5">
+                                                <span t-esc="o.choc_d.name"/>
+                                            </b>
+                                            <b class="col-5">
+                                                <span t-esc="reparation.reparation_id.famille_repa.name"/>
+                                            </b>
+                                        </div>
+                                        <span t-field="reparation.desc"/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 4 " t-foreach="o.reparations5_ids" t-as="reparation">
+
+                                        <div class="row">
+                                            <b class="col-5">
+                                                <span t-esc="o.choc_e.name"/>
+                                            </b>
+                                            <b class="col-5">
+                                                <span t-esc="reparation.reparation_id.famille_repa.name"/>
+                                            </b>
+                                        </div>
+                                        <span t-field="reparation.desc"/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 5 " t-foreach="o.reparations6_ids" t-as="reparation">
+
+                                        <div class="row">
+                                            <b class="col-5">
+                                                <span t-esc="o.choc_f.name"/>
+                                            </b>
+                                            <b class="col-5">
+                                                <span t-esc="reparation.reparation_id.famille_repa.name"/>
+                                            </b>
+                                        </div>
+                                        <span t-field="reparation.desc"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="o.nbr_choc &gt; 0 " t-foreach="o.reparations1_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.duree"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 1 " t-foreach="o.reparations2_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.duree"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 2 " t-foreach="o.reparations3_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.duree"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 3 " t-foreach="o.reparations4_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.duree"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 4 " t-foreach="o.reparations5_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.duree"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 5 " t-foreach="o.reparations6_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.duree"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="o.nbr_choc &gt; 0 " t-foreach="o.reparations1_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.montant"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 1 " t-foreach="o.reparations2_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.montant"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 2 " t-foreach="o.reparations3_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.montant"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 3 " t-foreach="o.reparations4_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.montant"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 4 " t-foreach="o.reparations5_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.montant"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 5 " t-foreach="o.reparations6_ids" t-as="reparation">
+                                        <b>
+                                            <span t-esc="reparation.montant"/>
+                                        </b>
+                                        <span style="color:#FFFFFF" t-esc="reparation.desc"/>
+                                        <br/>
+                                    </t>
+                                </td>
+
+                            </tr>
+                        </table>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 100%;background :#E8E8E8;">
+                                    <center>
+                                        <b>Fournitures</b>
+                                    </center>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width: 50%;">
+                            <tr>
+                                <td style="width: 5%;background :#E8E8E8;">
+                                    <b>Qte</b>
+                                </td>
+                                <td style="width: 25%;background :#E8E8E8;">
+                                    <b>Désignation</b>
+                                </td>
+                                <td style="width: 10%;background :#E8E8E8;">
+                                    <b>H.T</b>
+                                </td>
+                                <td style="width: 10%;background :#E8E8E8;">
+                                    <b>T.V.A</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 5%;">
+                                    <br/>
+                                    <t t-if="o.nbr_choc &gt; 0 ">
+
+                                        <t t-if="o.nbr_choc &gt; 0 " t-foreach="o.fournitures1_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.quantite"/>
+                                            <br/>
+                                        </t>
+
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 1 ">
+
+                                        <t t-if="o.nbr_choc &gt; 1 " t-foreach="o.fournitures2_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.quantite"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 2 ">
+
+                                        <t t-if="o.nbr_choc &gt; 2 " t-foreach="o.fournitures3_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.quantite"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt;3 ">
+
+                                        <t t-if="o.nbr_choc &gt; 3 " t-foreach="o.fournitures4_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.quantite"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+
+                                    <t t-if="o.nbr_choc &gt;4 ">
+                                        <t t-if="o.nbr_choc &gt; 4 " t-foreach="o.fournitures5_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.quantite"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 5 ">
+
+
+                                        <t t-if="o.nbr_choc &gt; 5 " t-foreach="o.fournitures6_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.quantite"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                </td>
+                                <td style="width: 25%;">
+
+                                    <t t-if="o.nbr_choc &gt; 0 ">
+                                        <u>
+                                            <b>
+                                                <span t-esc="o.choc_a.name"/>
+                                            </b>
+                                        </u>
+                                        <br/>
+                                        <t t-if="o.nbr_choc &gt; 0 " t-foreach="o.fournitures1_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.piece_id.name"/>
+                                            <br/>
+                                        </t>
+
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 1 ">
+                                        <br/>
+                                        <u>
+                                            <b>
+                                                <span t-esc="o.choc_b.name"/>
+                                            </b>
+                                        </u>
+                                        <br/>
+
+                                        <t t-if="o.nbr_choc &gt; 1 " t-foreach="o.fournitures2_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.piece_id.name"/>
+                                            <br/>
+                                        </t>
+
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 2 ">
+                                        <br/>
+                                        <u>
+                                            <b>
+                                                <span t-esc="o.choc_c.name"/>
+                                            </b>
+                                        </u>
+                                        <br/>
+                                        <t t-if="o.nbr_choc &gt; 2 " t-foreach="o.fournitures3_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.piece_id.name"/>
+                                            <br/>
+                                        </t>
+
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt;3 ">
+                                        <br/>
+                                        <u>
+                                            <b>
+                                                <span t-esc="o.choc_d.name"/>
+                                            </b>
+                                        </u>
+                                        <br/>
+                                        <t t-if="o.nbr_choc &gt; 3 " t-foreach="o.fournitures4_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.piece_id.name"/>
+                                            <br/>
+                                        </t>
+
+                                    </t>
+
+                                    <t t-if="o.nbr_choc &gt;4 ">
+                                        <br/>
+                                        <u>
+                                            <b>
+                                                <span t-esc="o.choc_e.name"/>
+                                            </b>
+                                        </u>
+                                        <br/>
+                                        <t t-if="o.nbr_choc &gt; 4 " t-foreach="o.fournitures5_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.piece_id.name"/>
+                                            <br/>
+                                        </t>
+
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 5 ">
+                                        <br/>
+                                        <u>
+                                            <b>
+                                                <span t-esc="o.choc_f.name"/>
+                                            </b>
+                                        </u>
+                                        <br/>
+
+                                        <t t-if="o.nbr_choc &gt; 5 " t-foreach="o.fournitures6_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.piece_id.name"/>
+                                            <br/>
+                                        </t>
+
+                                    </t>
+                                </td>
+                                <td style="width: 10%;">
+                                    <br/>
+                                    <t t-if="o.nbr_choc &gt; 0 ">
+
+                                        <t t-if="o.nbr_choc &gt; 0 " t-foreach="o.fournitures1_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_ht"/>
+                                            <br/>
+                                        </t>
+
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 1 ">
+
+                                        <t t-if="o.nbr_choc &gt; 1 " t-foreach="o.fournitures2_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_ht"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 2 ">
+
+                                        <t t-if="o.nbr_choc &gt; 2 " t-foreach="o.fournitures3_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_ht"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt;3 ">
+
+                                        <t t-if="o.nbr_choc &gt; 3 " t-foreach="o.fournitures4_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_ht"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+
+                                    <t t-if="o.nbr_choc &gt;4 ">
+                                        <t t-if="o.nbr_choc &gt; 4 " t-foreach="o.fournitures5_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_ht"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 5 ">
+
+
+                                        <t t-if="o.nbr_choc &gt; 5 " t-foreach="o.fournitures6_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_ht"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                </td>
+                                <td style="width: 10%;">
+                                    <br/>
+                                    <t t-if="o.nbr_choc &gt; 0 ">
+
+                                        <t t-if="o.nbr_choc &gt; 0 " t-foreach="o.fournitures1_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_tva"/>
+                                            <br/>
+                                        </t>
+
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 1 ">
+
+                                        <t t-if="o.nbr_choc &gt; 1 " t-foreach="o.fournitures2_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_tva"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 2 ">
+
+                                        <t t-if="o.nbr_choc &gt; 2 " t-foreach="o.fournitures3_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_tva"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt;3 ">
+
+                                        <t t-if="o.nbr_choc &gt; 3 " t-foreach="o.fournitures4_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_tva"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+
+                                    <t t-if="o.nbr_choc &gt;4 ">
+                                        <t t-if="o.nbr_choc &gt; 4 " t-foreach="o.fournitures5_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_tva"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.nbr_choc &gt; 5 ">
+
+
+                                        <t t-if="o.nbr_choc &gt; 5 " t-foreach="o.fournitures6_ids"
+                                           t-as="fourniture">
+                                            <span t-esc="fourniture.montant_tva"/>
+                                        </t>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <br/>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 25%;background :#E8E8E8;">
+                                    <b>Montant Total(TTC)</b>
+                                </td>
+                                <td style="width: 25%;background :#E8E8E8;">
+                                    <b>Montant MAin-d'oeuvre</b>
+                                </td>
+                                <td style="width: 25%;background :#E8E8E8;">
+                                    <b>Montant Peinture</b>
+                                </td>
+                                <td style="width: 30%;background :#E8E8E8;">
+                                    <b>Montant Fournitures</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>
+                                        <center>
+                                            <span t-field="o.total_ttc"/>
+                                        </center>
+                                    </b>
+                                </td>
+                                <td>
+                                    <t t-foreach="o.resume_chocs_ids"
+                                       t-as="resume">
+                                        <p>
+                                            <span t-field="resume.classe"/>
+                                            <span t-field="resume.main_d_oeuvre"/>
+                                        </p>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-foreach="o.resume_chocs_ids"
+                                       t-as="resume">
+                                        <p>
+                                            <span t-field="resume.classe"/>
+                                            <span t-field="resume.peinture"/>
+                                        </p>
+                                    </t>
+                                </td>
+                                <td>
+                                    <p>
+                                        <b class="col-4"></b>
+                                        <b class="col-4">TVA</b>
+                                        <b class="col-4">TTC</b>
+                                    </p>
+
+                                    <t t-foreach="o.resume_chocs_ids"
+                                       t-as="resume">
+                                        <p>
+                                            <span t-field="resume.classe"/>
+                                            <span t-field="resume.montant_tva"/>
+                                            <span t-field="resume.montant_ttc"/>
+                                        </p>
+                                    </t>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 100%;">
+                                    <p>Montant Total en Lettres :
+                                        <b>
+                                            <span t-field="o.total_ttc_text"/>
+                                        </b>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 10%;">
+                                    <p>Photos :
+                                        <b>
+                                            <t t-set="photos_len" t-value="len(o.photos_ids)"/>
+                                            <span t-esc="photos_len"/>
+                                        </b>
+                                    </p>
+                                </td>
+                                <td style="width: 30%;">
+                                    <p>Immobilisations (Jours) :
+                                    </p>
+                                </td>
+                                <td style="width: 60%;">
+                                    <p>Vétusté (%) :
+                                        <b>
+                                            <span t-esc="o.taux_vet"/>
+                                        </b>
+                                        Soit :
+                                        <b>
+                                            <span t-esc="o.val_vet"/>
+                                        </b>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <u>
+                            <b>OBSERVATION :</b>
+                        </u>
+                        <br/>
+                        <div class="row">
+                            <div class="col-6" style="text-align: left;">
+                                <span t-esc="o.obsrv_pv"/>
+                            </div>
+                            <div class="col-6">
+                                <b style="text-align: right;">
+                                    <u>Cachet et signature de l'expert</u>
+                                </b>
+                            </div>
+                        </div>
+
+                        <div class="footer">
+                            <center>
+                                مؤسسة بالأسهم ذات رأس مال 540 مليون دينار جزائري رقم السجل التجاري 98 ب 3058 المقر
+                                الرئيسي طريق دالي إبراهيم الشراقة الجزائر
+                                <br/>
+                                Société par actions au capital social de 540 millions de dinars -RC N° 98 B 3058-Route
+                                de Delly Ibrahim cheraga
+                                <br/>
+                                ALGER TEL 021.36.23.99- 021.36.27.25-021.36.17.03-FAX 021.36.17.03-021.36.17.12
+                                <br/>
+                            </center>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+        <template id="pv_auto2">
+            <t t-call="expertise_auto_sae.pv_auto"/>
+            <t style="page-break-before: always;" t-call="expertise_auto_sae.hn_auto"/>
+        </template>
+    </data>
+</odoo>
+
+
+
+
+
+

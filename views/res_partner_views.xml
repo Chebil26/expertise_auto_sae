@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--form partner view-->
+    <record id="res_partner_inherit_view_form" model="ir.ui.view">
+        <field name='name'>res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="honoraire_fixe" attrs="{'invisible': [('is_customer', '!=', True)]}"/>
+                <field name="ltr_inv" attrs="{'invisible': [('is_customer', '!=', True)]}"/>
+                <field name="val_ven" attrs="{'invisible': [('is_customer', '!=', True)]}"/>
+                <field name="first_level" attrs="{'invisible': [('is_customer', '!=', True)]}" force_save="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

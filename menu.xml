@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+            id="auto_sae_me_nu_root"
+            name="Expertise Auto"
+            web_icon="expertise_auto_sae,static/src/img/icon_image.png"
+            groups="base.group_user"
+            action="action_sae_expertise_auto"
+            sequence="4"/>
+    <menuitem
+            id="auto_sae_menu_configuration"
+            name="Configuration"
+            groups="base.group_user"
+            parent="auto_sae_me_nu_root"
+            sequence="10"/>
+    <menuitem
+            id="auto_sae_menu_reception"
+            name="Réception de dossiers"
+            groups="base.group_user"
+            parent="auto_sae_me_nu_root"
+            sequence="3"/>
+    <menuitem
+            id="auto_sae_menu_traitement"
+            name="Traitement de dossiers"
+            groups="base.group_user"
+            parent="auto_sae_me_nu_root"
+            sequence="6"/>
+    <menuitem
+            id="auto_sae_menu_carcteristiques"
+            name="Caractéristiques Véhicule"
+            parent="auto_sae_menu_configuration"
+            sequence="5"/>
+    <menuitem
+            id="auto_sae_menu_choc_piece"
+            name="Chocs et Pièces"
+            parent="auto_sae_menu_configuration"
+            sequence="6"/>
+
+    <menuitem
+            id="menu_auto_sae_distance"
+            name="Expertise à distance"
+            parent="auto_sae_menu_reception"
+            action="action_sae_distance"
+            sequence="9"/>
+    <menuitem
+            id="menu_auto_sae_nature"
+            name="Nature d'Expertise"
+            parent="auto_sae_menu_configuration"
+            action="action_sae_nature"
+            sequence="3"/>
+    <menuitem
+            id="menu_auto_sae_choc"
+            name="Choc"
+            parent="auto_sae_menu_choc_piece"
+            action="action_sae_choc"
+            sequence="4"/>
+    <menuitem
+            id="menu_auto_sae_famille_reparation"
+            name="Famille de Réparation"
+            parent="auto_sae_menu_choc_piece"
+            action="action_sae_famille_reparation"
+            sequence="5"/>
+    <menuitem
+            id="menu_auto_sae_reparation"
+            name="Réparation"
+            parent="auto_sae_menu_choc_piece"
+            action="action_sae_reparation"
+            sequence="6"/>
+    <menuitem
+            id="menu_auto_sae_piece"
+            name="Pièce"
+            parent="auto_sae_menu_choc_piece"
+            action="action_sae_piece"
+            sequence="7"/>
+
+    <menuitem
+            id="menu_auto_sae_lieu"
+            name="Lieu de Visite"
+            parent="auto_sae_menu_configuration"
+            action="action_sae_lieu"
+            sequence="2"/>
+
+    <menuitem
+            id="menu_auto_sae_marque"
+            name="Marque du Véhicule"
+            parent="auto_sae_menu_carcteristiques"
+            action="fleet.fleet_vehicle_model_brand_action"
+            sequence="5"/>
+    <menuitem
+            id="menu_auto_sae_modele"
+            name="Modèle du Véhicule"
+            parent="auto_sae_menu_carcteristiques"
+            action="fleet.fleet_vehicle_model_action"
+            sequence="5"/>
+    <menuitem
+            id="menu_auto_sae_type"
+            name="Type de Véhicule"
+            parent="auto_sae_menu_carcteristiques"
+            action="action_sae_type"
+            sequence="5"/>
+    <menuitem
+            id="menu_auto_sae_carosserie"
+            name="Carrosserie du Véhicule"
+            parent="auto_sae_menu_carcteristiques"
+            action="action_sae_carosserie"
+            sequence="5"/>
+    <menuitem
+            id="menu_auto_sae_energie"
+            name="Energie du Véhicule"
+            parent="auto_sae_menu_carcteristiques"
+            action="action_sae_energie"
+            sequence="5"/>
+    <menuitem
+            id="menu_auto_sae_couleur"
+            name="Couleur du Véhicule"
+            parent="auto_sae_menu_carcteristiques"
+            action="action_sae_couleur"
+            sequence="5"/>
+    <menuitem
+            id="menu_auto_sae_genre"
+            name="Genre du Véhicule"
+            parent="auto_sae_menu_carcteristiques"
+            action="action_sae_genre"
+            sequence="5"/>
+
+    <!--    <menuitem-->
+    <!--            id="menu_auto_sae_motif_annulation"-->
+    <!--            name="Motif d'Annulation"-->
+    <!--            parent="auto_sae_menu_configuration"-->
+    <!--            action="action_sae_motif_raison"-->
+    <!--            sequence="7"/>-->
+    <menuitem id="menu_expertise_auto_global_setting" name="Paramètres"
+              parent="auto_sae_menu_configuration" sequence="0" action="action_sae_auto_configuration"
+              groups="base.group_system"/>
+    <menuitem
+            id="menu_auto_sae_pre_enregistrement"
+            name="Pré Enregistrement"
+            parent="auto_sae_menu_reception"
+            action="action_sae_pre_enregistrement"
+            sequence="1"/>
+    <menuitem
+            id="menu_auto_sae_creation_dossier"
+            name="Création de Dossier"
+            parent="auto_sae_menu_reception"
+            action="action_creation_ods_wizard"
+            sequence="2"/>
+
+    <!--  hereeeeeeeeeeeeeeee here -->
+    <menuitem
+            id="menu_auto_sae_creation_dossier_csv"
+            name="Création de Dossier CSV"
+            parent="auto_sae_menu_reception"
+            action="action_creation_csv_wizard"
+            sequence="2"/>
+
+
+    <menuitem
+            id="menu_auto_sae_creation_ods"
+            name="ODS Enregistrés"
+            parent="auto_sae_menu_reception"
+            action="action_sae_expertise_auto_crea"
+            sequence="3"/>
+    <menuitem
+            id="menu_auto_sae_creation_ods_expert"
+            name="ODS En Instance"
+            parent="auto_sae_menu_traitement"
+            action="action_sae_expertise_auto_crea_expert"
+            sequence="3"/>
+    <menuitem
+            id="menu_auto_sae_accpte_ods_expert"
+            name="ODS En cours de Traitement"
+            parent="auto_sae_menu_traitement"
+            action="action_sae_expertise_auto_acpt"
+            sequence="3"/>
+    <menuitem
+            id="menu_auto_sae_pv_expert"
+            name="PV Expert"
+            parent="auto_sae_menu_traitement"
+            action="action_traitement_expertise_pv_expert"
+            sequence="5"/>
+    <menuitem
+            id="menu_auto_sae_annulatin_ods_expert"
+            name="ODS Annulés"
+            parent="auto_sae_menu_traitement"
+            action="action_sae_expertise_auto_annule_expert"
+            sequence="6"/>
+
+    <menuitem
+            id="menu_auto_sae_annulatin_ods"
+            name="ODS Annulés"
+            parent="auto_sae_menu_reception"
+            action="action_sae_expertise_auto_annule"
+            sequence="6"/>
+    <menuitem
+            id="auto_sae_menu_honoraire"
+            name="Honoraires"
+            parent="auto_sae_menu_configuration"
+            sequence="9"/>
+    <menuitem
+            id="auto_sae_menu_ods_cloturé"
+            name="Cloture de dossiers"
+            parent="auto_sae_me_nu_root"
+            sequence="8"/>
+    <menuitem
+            id="menu_auto_sae_cloture_ods"
+            name="Mise à Jour ODS"
+            parent="auto_sae_menu_ods_cloturé"
+            action="action_sae_expertise_auto_cloture_maj"
+            sequence="3"/>
+    <menuitem
+            id="menu_auto_sae_cloture_annule_remplace_ods"
+            name="Annule et Remplace"
+            parent="auto_sae_menu_ods_cloturé"
+            action="action_sae_expertise_auto_cloture_annule_remplace"
+            sequence="6"/>
+    <menuitem
+            id="menu_auto_sae_cloture_correction_ods"
+            name="Correction ODS"
+            parent="auto_sae_menu_ods_cloturé"
+            action="action_sae_expertise_auto_cloture_correction"
+            sequence="3"/>
+    <menuitem
+            id="menu_auto_sae_cloture_pv"
+            name="PV Cloturé"
+            parent="auto_sae_menu_ods_cloturé"
+            action="action_cloture_expertise_pv_expert"
+            sequence="6"/>
+    <menuitem
+            id="menu_auto_sae_bareme_honoraires"
+            name="Barème Honoraires"
+            parent="auto_sae_menu_honoraire"
+            action="action_bareme_honoraires"
+            sequence="5"/>
+</odoo>

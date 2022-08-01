@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_cloturer_avis_wizard" model="ir.ui.view">
+        <field name="name">Wizard</field>
+        <field name="model">cloturer.avis.technique</field>
+        <field name="arch" type="xml">
+            <form>
+
+
+                    <group>
+                        <field name="dossier_id"/>
+                         <field name="lignes_honoraires_ids" widget="one2many" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="product_id" domain="[('note_hono', '=', True)]"/>
+                                    <field name="note_hono" invisible="1"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="tax_ids" widget="many2many_tags"/>
+                                </tree>
+                            </field>
+                    </group>
+
+                <footer>
+                    <button name="confirmer" string="Confirmer" type="object" class="oe_highlight"/>
+                    <button name="annuler" string="Annuler" type="object" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_cloturer_avis_wizard">
+        <field name="name">Cloturer Dossier</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">cloturer.avis.technique</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_cloturer_avis_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

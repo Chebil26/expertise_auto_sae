@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="view_annule_remplace_pv_wizard" model="ir.ui.view">
+        <field name="name">Wizard</field>
+        <field name="model">annule.remplace.pv.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="dossier_id" invisible="1"/>
+                    <field name="text_confirmation"/>
+                </sheet>
+                <footer>
+                    <button name="confirmer" string="Confirmer" type="object" class="oe_highlight"/>
+                    <button string="Annuler" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_annule_remplace_pv_wizard">
+        <field name="name">Enregistrement des Ods</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">annule.remplace.pv.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_annule_remplace_pv_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

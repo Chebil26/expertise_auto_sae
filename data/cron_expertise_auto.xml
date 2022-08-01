@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="cron_passage_comptabilise_note" model="ir.cron">
+            <field name="name">Passage Note d'Honoraires à comptabiliser Auto</field>
+            <field name="model_id" ref="model_sae_expertise_auto"/>
+            <field name="code">model.cron_passage_comptabilise()</field>
+            <field name="nextcall" eval="(DateTime.now(pytz.timezone('Africa/Algiers')) + timedelta(days=1)).astimezone(pytz.timezone('Africa/Algiers')).strftime('%Y-%m-%d 00:00:00')"/>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+    </data>
+</odoo>

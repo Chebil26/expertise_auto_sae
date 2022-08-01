@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="view_creation_ods_wizard" model="ir.ui.view">
+        <field name="name">Wizard</field>
+        <field name="model">creation.ods.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Renseignements Client">
+                            <field name="compagnie" options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                            <field name="code_agence_domain" invisible="1"/>
+                            <field name="code_agence" domain="code_agence_domain" options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                            <field name="date_ods"/>
+                            <field name="num_ods"/>
+                            <field name="nom_assure"/>
+                            <field name="contact"/>
+                            <field name="type_nature" invisible="1"/>
+                        </group>
+                        <group string="Renseignements Sinistre"
+                               attrs="{'invisible': [('type_nature', '!=', 'sinistre')]}">
+
+                            <field name="date_sinistre" attrs="{'required': [('type_nature', '=', 'sinistre')]}"/>
+                            <field name="num_sinistre" attrs="{'required': [('type_nature', '=', 'sinistre')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Renseignements Expertise">
+                            <field name="operating_unit_domain" invisible="1"/>
+                            <field name="operating_unit" domain="operating_unit_domain" options="{'no_create': True,'no_open': True, 'no_create_edit':True}"/>
+                            <field name="expert_id" attrs="{'readonly': [('id', '!=', False)]}"  options="{'no_create': True,'no_open': True, 'no_create_edit':True}"/>
+                            <field name="nature_id" options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                            <field name="lieu_id" options="{'no_create': True, 'no_create_edit':True,'no_open': True}"
+                                   attrs="{'readonly': [('id', '!=', False)]}"/>
+                        </group>
+                        <group string="Renseignements Véhicule" attrs="{'invisible': [('type_nature', '!=', 'sinistre')]}">
+                            <field name="Type_imma"  attrs="{'required': [('type_nature', '=', 'sinistre')],'invisible': [('type_nature', '!=', 'sinistre')]}"/>
+                            <field name="immatricul"  attrs="{'required': [('type_nature', '=', 'sinistre')],'invisible': [('type_nature', '!=', 'sinistre')]}"/>
+                            <field name="num_chas"  attrs="{'required': [('type_nature', '=', 'sinistre')],'invisible': [('type_nature', '!=', 'sinistre')]}"/>
+                        </group>
+
+
+                    <group string="QR Code">
+
+                        <!--<field name="qrf"/>-->
+                        <field name="qrt"/>
+
+                    </group>
+
+                    </group>
+                    <field name="obsrv"/>
+                </sheet>
+                <footer>
+                    <button name="creer" string="Créer" type="object" class="oe_highlight"/>
+                    <button name="sauvegarder_et_creer" string="Sauvegarder et Créer" type="object" class="oe_highlight"/>
+                    <button string="Annuler" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_creation_ods_wizard">
+        <field name="name">Création ODS</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">creation.ods.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_creation_ods_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

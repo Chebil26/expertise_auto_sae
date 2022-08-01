@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<odoo>
+        <record id="sae_motif_annulation_form_view" model="ir.ui.view">
+            <field name="name">sae.motif.annulation.form</field>
+            <field name="model">sae.motif.annulation</field>
+            <field name="arch" type="xml">
+                <form string="Raison D'Annulation">
+                    <group class="oe_title">
+                        <field name="lost_reason"/>
+                    </group>
+                    <footer>
+                        <button name="confirmer" string="Confirmer" type="object" class="btn-primary"/>
+                        <button string="Annuler" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="sae_motif_annulation_action" model="ir.actions.act_window">
+            <field name="name">Raison D'Annulation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sae.motif.annulation</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="sae_motif_annulation_form_view"/>
+            <field name="target">new</field>
+        </record>
+</odoo>

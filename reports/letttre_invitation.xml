@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report
+                id="lettre_invit_auto_report"
+                string="Lettre Invitation"
+                model="sae.expertise.auto"
+                report_type="qweb-pdf"
+                file="expertise_auto_sae.lettre_invit_auto"
+                name="expertise_auto_sae.lettre_invit_auto"
+                menu="True"
+        />
+
+
+        <template id="lettre_invit_auto">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <style>
+                            h3
+                            {font-weight : thick;
+                            text-align : center;}
+                            .text-left
+                            { text-align : left; }
+
+                            .text-right{
+
+                            text-align : right;
+                            }
+                            #expand-box-header {
+                            margin: 0;
+                            padding: 0 0 3px 2px;
+                            overflow: auto;}
+                            .table, td ,th {
+                            border: 1px solid black;
+                            border-color : black;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            }
+                        </style>
+                        <div class="header">
+                            <div class="row" style="width: 100%;">
+
+                                <img t-if="user.company_id.logo" src='/web/binary/company_logo'
+                                     style="max-height:3cm; max-width:5cm;"/>
+                                <center>
+                                    <h3>الشركة الجزائرية للخبرة و المراقبة التقنية للسيارات</h3>
+                                    <h3>Société Algérienne d'Expertise et du Contrôle Technique Automobile</h3>
+                                </center>
+
+                            </div>
+                        </div>
+                        <center>Centre d'expertise :
+                            <b>
+                                <span t-esc="user.default_operating_unit_id.name"/>
+                            </b>
+                        </center>
+                        <br/>
+                            <span t-raw="o.text_lettre"/>
+
+                        <div class="footer">
+                            <center>
+                                مؤسسة بالأسهم ذات رأس مال 540 مليون دينار جزائري رقم السجل التجاري 98 ب 3058 المقر
+                                الرئيسي طريق دالي إبراهيم الشراقة الجزائر
+                                <br/>
+                                Société par actions au capital social de 540 millions de dinars -RC N° 98 B 3058-Route
+                                de Delly Ibrahim cheraga
+                                <br/>
+                                ALGER TEL 021.36.23.99- 021.36.27.25-021.36.17.03-FAX 021.36.17.03-021.36.17.12
+                                <br/>
+                            </center>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+
+
+
+
+
+
